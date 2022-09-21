@@ -1,0 +1,20 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <!-- Sidebar - Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <div class="sidebar-brand-icon rotate-n-15">
+      <i class="bi bi-cash-coin"></i>
+    </div>
+    <div class="sidebar-brand-text mx-3">Finociate</div>
+  </a>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
+
+  <li *ngFor="let menuItem of menuItems" class="nav-item">
+    <a class="nav-link" [routerLink]="[menuItem.path]">
+      <i class="bi {{menuItem.icon}}"></i>
+      <span>{{menuItem.title}}</span>
+    </a>
+  </li>
+  <hr class="sidebar-divider">
+</ul>
