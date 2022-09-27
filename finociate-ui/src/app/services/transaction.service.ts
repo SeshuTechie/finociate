@@ -7,12 +7,14 @@ import { TransactionList } from '../shared/model/transaction-list';
 import { FilterParams } from '../shared/model/filter-params';
 import { TransactionSummary } from '../shared/model/transaction-summary';
 import { AmountsData } from '../shared/model/transaction-summary copy';
+import { Globals } from '../shared/global';
+import { ServiceHelper } from './helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
-  apiURL = 'http://localhost:8080';
+  apiURL = Globals.BASE_API_URL;
 
   constructor(private http: HttpClient) { }
 
@@ -26,28 +28,28 @@ export class TransactionService {
   getTransactions(filterParams: FilterParams): Observable<TransactionList> {
     return this.http
       .get<TransactionList>(this.apiURL + '/transactions?' + this.getFilterString(filterParams))
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API get() method => Fetch transactions summary
   getTransactionsSummary(filterParams: FilterParams): Observable<TransactionSummary> {
     return this.http
       .get<TransactionSummary>(this.apiURL + '/transactions/summary?' + this.getFilterString(filterParams))
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API get() method => Fetch transactions summary
   getSpendCategoryData(filterParams: FilterParams): Observable<AmountsData> {
     return this.http
       .get<AmountsData>(this.apiURL + '/summary/categories?' + this.getFilterString(filterParams))
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API get() method => Fetch transaction
   getTransaction(id: any): Observable<Transaction> {
     return this.http
       .get<Transaction>(this.apiURL + '/transaction/' + id)
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API post() method => Create transaction
@@ -58,7 +60,7 @@ export class TransactionService {
         JSON.stringify(transaction),
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API post() method => Create transaction
@@ -69,7 +71,7 @@ export class TransactionService {
         JSON.stringify({ text: transactionText }),
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API put() method => Update transaction
@@ -80,31 +82,16 @@ export class TransactionService {
         JSON.stringify(transaction),
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API delete() method => Delete transaction
   deleteTransaction(id: any) {
     return this.http
       .delete<Transaction>(this.apiURL + '/transaction/' + id, this.httpOptions)
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
-  // Error handling
-  handleError(error: any) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    window.alert(errorMessage);
-    return throwError(() => {
-      return errorMessage;
-    });
-  }
 
   getFilterString(filterParams: FilterParams) {
     let filter = 'x=1';

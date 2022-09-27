@@ -1,0 +1,65 @@
+﻿key,value
+transaction-type,credit
+transaction-type,debit
+spend-type,Food
+spend-type,Cash
+spend-type,CC Bill Payment
+spend-type,Clothing
+spend-type,Donation
+spend-type,Entertainment
+spend-type,General Needs
+spend-type,Gifts
+spend-type,Health
+spend-type,Household Items
+spend-type,Jewelry
+spend-type,Learning
+spend-type,Maintenance
+spend-type,Misc
+spend-type,Savings
+spend-type,Service Charge
+spend-type,Shelter
+spend-type,Transport
+spend-type,Utility Bills
+spend-type,Lifestyle
+spend-type,Travel
+savings-type,MF
+savings-type,Shares
+savings-type,LIC
+savings-type,Term Deposit
+savings-type,PPF
+savings-type,FD
+savings-type,Flexi/RD
+savings-type,Crypto Coins
+credit-type,SB Interest
+credit-type,Shares Dividend
+credit-type,MF Dividend
+credit-type,MF Withdraw
+credit-type,Shares Withdraw
+credit-type,LIC Moneyback
+credit-type,Salary
+credit-type,Other
+credit-type,Gift
+credit-type,Bonds Interest
+credit-type,Bonds Mature
+credit-type,Flexi/RD Mature
+credit-type,FD Closure
+account,ICICI SB
+account,UBI SB
+account,Canara SB
+account,Cash
+account,CITI CC
+account,HDFC SB
+account,ICICI CC
+account,MF Dividend
+account,SBI SB
+account,Shares Dividend
+payment-mode,Card
+payment-mode,UPI
+payment-mode,NEFT
+payment-mode,Auto
+payment-mode,Cash
+payment-mode,IMPS
+payment-mode,Cheque
+payment-mode,Card-Online
+payment-mode,ATM
+payment-mode,Online

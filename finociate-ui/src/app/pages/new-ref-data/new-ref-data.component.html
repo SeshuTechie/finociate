@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">New Reference Data</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            Reference Data
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <select class="form-control" [(ngModel)]="refData.key" id="key">.
+                            <option value="" disabled selected>Select Key</option>
+                            <option value="account">account</option>
+                            <option value="payment-mode">payment-mode</option>
+                            <option value="savings-type">savings-type</option>
+                            <option value="spend-type">spend-type</option>
+                            <option value="credit-type">credit-type</option>
+                            <option value="transaction-type">transaction-type</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="refData.value" class="form-control" placeholder="Value">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="refData.description" class="form-control"
+                            placeholder="Description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg btn-block" (click)="addRefData(refData)">Add
+                        Data</button>
+                </div>
+            </div>
+        </div>

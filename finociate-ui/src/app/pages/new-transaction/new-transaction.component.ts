@@ -16,6 +16,7 @@ export class NewTransactionComponent implements OnInit {
     amount: 0,
     category: '',
     type: '',
+    account: '',
     store: '',
     subCategory: '',
     particulars: '',

@@ -12,13 +12,18 @@ import { FooterModule } from '../shared/footer/footer.module';
 import { DataTablesModule } from 'angular-datatables';
 import { NewTransactionComponent } from '../pages/new-transaction/new-transaction.component';
 import { DashboardModule } from '../pages/dashboard/dashboard.module';
+import { RefDataComponent } from '../pages/ref-data/ref-data.component';
+import { NewRefDataComponent } from '../pages/new-ref-data/new-ref-data.component';
 
 @NgModule({
   declarations: [
     AdminLayoutComponent,
     TransactionsComponent,
+    RefDataComponent,
     UserComponent,
-    NewTransactionComponent
+    NewTransactionComponent,
+    RefDataComponent,
+    NewRefDataComponent
   ],
   imports: [
     CommonModule,

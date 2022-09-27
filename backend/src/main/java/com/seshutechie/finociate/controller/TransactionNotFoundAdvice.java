@@ -1,5 +1,6 @@
 package com.seshutechie.finociate.controller;
 
+import com.seshutechie.finociate.exception.ErrorData;
 import com.seshutechie.finociate.exception.TransactionNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,5 +15,12 @@ public class TransactionNotFoundAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String transactionNotFoundHandler(TransactionNotFoundException ex) {
         return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ErrorData otherErrorHandler(RuntimeException ex) {
+        return new ErrorData(ex.getMessage());
     }
 }

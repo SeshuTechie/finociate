@@ -1,6 +1,7 @@
 package com.seshutechie.finociate.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Document(collection = "Transactions")
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
     @Id
     private String id;
@@ -20,10 +22,12 @@ public class Transaction {
     private Date date;
     private double amount;
     private String type;
+    private String account;
     private String category;
     private String subCategory;
     private String store;
     private String particulars;
+    private String mode;
     private List<String> tags;
     private String notes;
 }

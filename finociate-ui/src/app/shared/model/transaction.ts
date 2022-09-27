@@ -4,6 +4,7 @@ export interface Transaction {
     amount: number,
     date: String,
     type: string,
+    account: string,
     category: string,
     subCategory: string,
     store: string,

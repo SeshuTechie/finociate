@@ -14,8 +14,19 @@ export class SpendCategoryChartComponent {
 
   // Pie
   public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: false,
+    responsive: false
   };
+
+  public pieChartOption: any = {
+    legend: {
+      position: 'right',
+      labels: {
+        fontSize: 10,
+        usePointStyle: true
+      }
+    }
+  }
+  
   public pieChartLabels : string[] = [];
   public pieChartDatasets = [ { data: [ 1, 2, 3 ]  } ];
   public pieChartLegend = true;

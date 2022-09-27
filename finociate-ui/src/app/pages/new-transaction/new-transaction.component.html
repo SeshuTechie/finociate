@@ -39,11 +39,17 @@
                 <div class="col">
                     <div class="form-group">
                         <select class="form-control" [(ngModel)]="transaction.type" id="type">
+                            <option value="" disabled selected>Select Type</option>
                             <option value="Debit">Debit</option>
                             <option value="Credit">Credit</option>
                         </select>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="transaction.account" class="form-control" placeholder="Account">
+                    </div>
+                </div>                
             </div>
             <div class="form-row">
                 <div class="col">
