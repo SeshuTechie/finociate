@@ -1,0 +1,9 @@
+<input type="text" 
+    ngxDaterangepickerMd
+    [locale]="{ 'format': 'YYYY-MM-DD'}"
+    [(ngModel)]="selected"
+    [ranges]="ranges"
+    [alwaysShowCalendars]="true"
+    (change)="onDateWindowChanged($event)"
+    name="daterange"
+    class="form-control bg-light border-0 small"/>

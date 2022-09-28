@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { DateRangeService } from 'src/app/services/date-range.service';
 import { TransactionService } from 'src/app/services/transaction.service';
+import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { TransactionSummary } from 'src/app/shared/model/transaction-summary';
 
@@ -15,21 +17,30 @@ export class DashboardComponent implements OnInit {
     totalSavings: 0,
     savingsPercent: 0
   };
+  filterParams: FilterParams = {
+    fromDate: '',
+    toDate: ''
+  }
   currencySymbl = "₹";
   currencyCode = "INR";
 
-  constructor(public transactionService: TransactionService) { }
+  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService) { }
 
   ngOnInit(): void {
-    this.getSummary();
+    this.dateRangeService.dateRange().subscribe(value => {
+      console.log('Date changed for dashboard', value);
+      this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
+      this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
+      console.log('Dashboard filterParams', this.filterParams);
+      this.getSummary();
+    })
   }
 
   getSummary() {
-    let filterParams: FilterParams = {
-      fromDate: '',
-      toDate: ''
-    }
-    return this.transactionService.getTransactionsSummary(filterParams).subscribe((data: TransactionSummary) => {
+    return this.transactionService.getTransactionsSummary(this.filterParams).subscribe((data: TransactionSummary) => {
+      if (isNaN(data.savingsPercent)) {
+        data.savingsPercent = 0;
+      }
       this.summary = data;
       console.log("Transactions", data);
     });

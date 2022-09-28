@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ChartOptions } from 'chart.js';
+import { DateRangeService } from 'src/app/services/date-range.service';
 import { TransactionService } from 'src/app/services/transaction.service';
+import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { AmountsData } from 'src/app/shared/model/transaction-summary copy';
 
@@ -10,40 +12,38 @@ import { AmountsData } from 'src/app/shared/model/transaction-summary copy';
   styleUrls: ['./spend-category-chart.component.css']
 })
 export class SpendCategoryChartComponent {
-  title = 'ng2-charts-demo';
-
   // Pie
   public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: false
-  };
-
-  public pieChartOption: any = {
-    legend: {
-      position: 'right',
-      labels: {
-        fontSize: 10,
-        usePointStyle: true
+    responsive: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'right'
       }
     }
-  }
-  
-  public pieChartLabels : string[] = [];
-  public pieChartDatasets = [ { data: [ 1, 2, 3 ]  } ];
+  };
+
+  public pieChartLabels: string[] = [];
+  public pieChartDatasets = [{ data: [1, 2, 3] }];
   public pieChartLegend = true;
   public pieChartPlugins = [];
 
-  constructor(public transactionService: TransactionService) { }
+  filterParams: FilterParams = {
+    fromDate: '',
+    toDate: ''
+  }
+  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.dateRangeService.dateRange().subscribe(value => {
+      this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
+      this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
+      this.loadData();
+    })
   }
 
   loadData() {
-    let filterParams: FilterParams = {
-      fromDate: '',
-      toDate: ''
-    }
-    return this.transactionService.getSpendCategoryData(filterParams).subscribe((data: AmountsData) => {
+    return this.transactionService.getSpendCategoryData(this.filterParams).subscribe((data: AmountsData) => {
       console.log(data);
       this.pieChartLabels = [];
       let values: number[] = [];
