@@ -1,6 +1,7 @@
 package com.seshutechie.finociate.controller;
 
 import com.seshutechie.finociate.common.AppConfig;
+import com.seshutechie.finociate.common.util.DateUtil;
 import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.service.TransactionService;
 import jakarta.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
@@ -25,7 +27,7 @@ public class TransactionController {
 
     @PostConstruct
     private void init() {
-        dateFormat = new SimpleDateFormat(appConfig.dateFormat);
+        dateFormat = DateUtil.getDateFormat(appConfig.dateFormat);
     }
     @Autowired
     private TransactionService transactionService;
@@ -55,6 +57,11 @@ public class TransactionController {
     @GetMapping("/summary/categories")
     public AmountsData getCategoryAmountData(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
         return transactionService.getCategoryAmountsData(getFilterOptions(fromDate, toDate));
+    }
+
+    @GetMapping("/summary/monthly")
+    public TransactionSummaryList getMonthlySummary(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
+        return transactionService.getMonthlySummary(getFilterOptions(fromDate, toDate));
     }
 
     private Date getDate(String date) {

@@ -1,6 +1,7 @@
 package com.seshutechie.finociate.service;
 
 import com.seshutechie.finociate.common.AppConstants;
+import com.seshutechie.finociate.common.util.DateUtil;
 import com.seshutechie.finociate.exception.TransactionNotFoundException;
 import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.repository.TransactionRepo;
@@ -9,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -93,7 +96,10 @@ public class TransactionService {
                 transactionSummary.setTotalIncome(totalCredit);
                 transactionSummary.setTotalSpend(totalDebit - totalSavings);
                 transactionSummary.setTotalSavings(totalSavings);
-                transactionSummary.setSavingsPercent(totalSavings / totalCredit);
+                transactionSummary.setSavingsPercent(totalCredit > 0 ? totalSavings / totalCredit : 0);
+                if (filters != null) {
+                    transactionSummary.setDate(DateUtil.getStartOfMonth(filters.getFromDate()));
+                }
             }
         }
         return transactionSummary;
@@ -112,5 +118,27 @@ public class TransactionService {
             }
         }
         return amountsData;
+    }
+
+    public TransactionSummaryList getMonthlySummary(FilterParameters filterOptions) {
+        if (filterOptions == null || filterOptions.getFromDate() == null || filterOptions.getToDate() == null) {
+            throw new IllegalArgumentException("From and To dates are required");
+        }
+        List<TransactionSummary> list = new ArrayList<>();
+        TransactionSummaryList transactionSummaryList = new TransactionSummaryList(list);
+
+        FilterParameters filterParameters = new FilterParameters();
+        LocalDate startDate = DateUtil.getLocalDate(filterOptions.getFromDate());
+        LocalDate endDate = DateUtil.getLocalDate(filterOptions.getToDate());
+        LocalDate currentStartDate = startDate;
+        while (currentStartDate.isBefore(endDate)) {
+            currentStartDate = DateUtil.getStartOfMonth(currentStartDate);
+            filterParameters.setFromDate(DateUtil.getDate(currentStartDate));
+            filterParameters.setToDate(DateUtil.getDate(DateUtil.getEndOfMonth(currentStartDate)));
+            TransactionSummary transactionsSummary = getTransactionsSummary(filterParameters);
+            list.add(transactionsSummary);
+            currentStartDate = currentStartDate.plusMonths(1);
+        }
+        return transactionSummaryList;
     }
 }

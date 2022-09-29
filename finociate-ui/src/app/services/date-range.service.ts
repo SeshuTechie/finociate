@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import dayjs from 'dayjs';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { CommonUtil } from '../shared/common-util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DateRangeService {
-  private dateRangeSubject = new BehaviorSubject({startDate: CommonUtil.getFY(0)?.startOf('month'), endDate: dayjs()});
+  private dateRangeSubject: Subject<any>; 
 
-  constructor() { }
+  constructor() { 
+    this.dateRangeSubject = new BehaviorSubject({startDate: CommonUtil.getFY(0)?.startOf('month'), endDate: dayjs()}); 
+  }
 
   dateRange() {
     return this.dateRangeSubject.asObservable();

@@ -4,7 +4,7 @@ import { DateRangeService } from 'src/app/services/date-range.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
-import { AmountsData } from 'src/app/shared/model/transaction-summary copy';
+import { AmountsData } from 'src/app/shared/model/amounts-data';
 
 @Component({
   selector: 'app-spend-category-chart',

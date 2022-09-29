@@ -12,10 +12,14 @@ import { TransactionSummary } from 'src/app/shared/model/transaction-summary';
 })
 export class DashboardComponent implements OnInit {
   summary: TransactionSummary = {
+    date: '',
     totalIncome: 0,
     totalSpend: 0,
     totalSavings: 0,
     savingsPercent: 0
+  };
+  budget = {
+    balance: 178000
   };
   filterParams: FilterParams = {
     fromDate: '',

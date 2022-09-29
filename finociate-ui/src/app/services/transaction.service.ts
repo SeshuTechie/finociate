@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Transaction } from '../shared/model/transaction';
 import { TransactionList } from '../shared/model/transaction-list';
 import { FilterParams } from '../shared/model/filter-params';
 import { TransactionSummary } from '../shared/model/transaction-summary';
-import { AmountsData } from '../shared/model/transaction-summary copy';
+import { AmountsData } from '../shared/model/amounts-data';
 import { Globals } from '../shared/global';
 import { ServiceHelper } from './helper';
+import { TransactionSummaryList } from '../shared/model/transaction-summary-list';
 
 @Injectable({
   providedIn: 'root'
@@ -38,12 +39,22 @@ export class TransactionService {
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
-  // HttpClient API get() method => Fetch transactions summary
+  // HttpClient API get() method => Fetch category summary
   getSpendCategoryData(filterParams: FilterParams): Observable<AmountsData> {
     return this.http
       .get<AmountsData>(this.apiURL + '/summary/categories?' + this.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
+
+    // HttpClient API get() method => Fetch monthly transactions summary
+    getMonthlyTransactionSummary(filterParams: FilterParams): Observable<TransactionSummaryList> {
+      if (filterParams.fromDate == '' || filterParams.toDate == '') {
+        return EMPTY;
+      }
+      return this.http
+        .get<TransactionSummaryList>(this.apiURL + '/summary/monthly?' + this.getFilterString(filterParams))
+        .pipe(retry(1), catchError(ServiceHelper.handleError));
+    }
 
   // HttpClient API get() method => Fetch transaction
   getTransaction(id: any): Observable<Transaction> {
