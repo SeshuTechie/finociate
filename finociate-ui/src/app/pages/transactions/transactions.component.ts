@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { Transaction } from 'src/app/shared/model/transaction';
@@ -19,7 +20,7 @@ export class TransactionsComponent implements OnInit {
     toDate: ''
   }
 
-  constructor(public transactionService: TransactionService) { }
+  constructor(public transactionService: TransactionService, public router: Router) { }
   
   ngOnInit(): void {
     this.dtOptions = {
@@ -43,5 +44,9 @@ export class TransactionsComponent implements OnInit {
         this.loadTransactions();
       });
     }
+  }
+
+  editTransaction(id: any) {
+    this.router.navigate(['/edit-transaction/' + id]);
   }
 }

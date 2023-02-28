@@ -10,7 +10,7 @@ export class DateRangeService {
   private dateRangeSubject: Subject<any>; 
 
   constructor() { 
-    this.dateRangeSubject = new BehaviorSubject({startDate: CommonUtil.getFY(0)?.startOf('month'), endDate: dayjs()}); 
+    this.dateRangeSubject = new BehaviorSubject({startDate: CommonUtil.getFYStart(0)?.startOf('month'), endDate: dayjs()}); 
   }
 
   dateRange() {

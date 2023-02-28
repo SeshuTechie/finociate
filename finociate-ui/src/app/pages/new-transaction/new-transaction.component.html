@@ -1,11 +1,12 @@
 <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800">New Transaction</h1>
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="isNewMode">New Transaction</h1>
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="!isNewMode">Update Transaction</h1>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             Transaction
         </div>
         <div class="card-body">
-            <div class="form-row">
+            <div class="form-row" *ngIf="isNewMode">
                 <div class="col">
                     <div class="form-group">
                         <textarea [(ngModel)]="transactionText" class="form-control" placeholder="Transaction Text"
@@ -40,8 +41,8 @@
                     <div class="form-group">
                         <select class="form-control" [(ngModel)]="transaction.type" id="type">
                             <option value="" disabled selected>Select Type</option>
-                            <option value="Debit">Debit</option>
-                            <option value="Credit">Credit</option>
+                            <option value="debit">Debit</option>
+                            <option value="credit">Credit</option>
                         </select>
                     </div>
                 </div>
@@ -83,8 +84,12 @@
             <div class="form-group">
                 <input type="text" [(ngModel)]="transaction.notes" class="form-control" placeholder="Notes">
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="isNewMode">
                 <button class="btn btn-success btn-lg btn-block" (click)="addTransaction(transaction)">Add
+                    Transaction</button>
+            </div>
+            <div class="form-group" *ngIf="!isNewMode">
+                <button class="btn btn-success btn-lg btn-block" (click)="editTransaction(transaction)">Update
                     Transaction</button>
             </div>
         </div>

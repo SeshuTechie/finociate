@@ -71,6 +71,9 @@
                                 <a (click)="deleteTransaction(transaction.id)" class="btn btn-danger btn-circle">
                                     <i class="bi bi-trash"></i>
                                 </a>
+                                <a (click) = "editTransaction(transaction.id)" class="btn btn-primary btn-circle">
+                                    <i class="bi bi-pen"></i>
+                                </a>
                             </td>
                         </tr>
                     </tbody>

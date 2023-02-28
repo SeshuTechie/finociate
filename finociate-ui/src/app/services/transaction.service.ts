@@ -89,7 +89,7 @@ export class TransactionService {
   updateTransaction(id: any, transaction: any): Observable<Transaction> {
     return this.http
       .put<Transaction>(
-        this.apiURL + '/transaction/' + id,
+        this.apiURL + '/transaction',
         JSON.stringify(transaction),
         this.httpOptions
       )

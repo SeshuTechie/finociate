@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'user', component: UserComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'new-transaction', component: NewTransactionComponent },
+  { path: 'edit-transaction/:id', component: NewTransactionComponent },
   { path: 'ref-data', component: RefDataComponent },
   { path: 'new-ref-data', component: NewRefDataComponent },
 ];
