@@ -20,6 +20,7 @@ export class NewTransactionComponent implements OnInit {
     account: '',
     store: '',
     subCategory: '',
+    mode: '',
     particulars: '',
     tags: [],
     notes: ''

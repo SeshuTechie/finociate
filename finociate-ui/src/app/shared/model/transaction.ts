@@ -8,7 +8,8 @@ export interface Transaction {
     category: string,
     subCategory: string,
     store: string,
-    particulars: string
-    tags: string[]
+    mode: string,
+    particulars: string,
+    tags: string[],
     notes: string
 }

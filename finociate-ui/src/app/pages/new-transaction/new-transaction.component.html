@@ -73,16 +73,19 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="transaction.particulars" class="form-control"
-                            placeholder="Patriculars">
+                        <input type="text" [(ngModel)]="transaction.mode" class="form-control"
+                            placeholder="Mode">
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <input type="text" [(ngModel)]="transaction.tags" class="form-control" placeholder="Tags">
+                <input type="text" [(ngModel)]="transaction.particulars" class="form-control" placeholder="Patriculars">
             </div>
             <div class="form-group">
                 <input type="text" [(ngModel)]="transaction.notes" class="form-control" placeholder="Notes">
+            </div>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="transaction.tags" class="form-control" placeholder="Tags">
             </div>
             <div class="form-group" *ngIf="isNewMode">
                 <button class="btn btn-success btn-lg btn-block" (click)="addTransaction(transaction)">Add
@@ -91,6 +94,9 @@
             <div class="form-group" *ngIf="!isNewMode">
                 <button class="btn btn-success btn-lg btn-block" (click)="editTransaction(transaction)">Update
                     Transaction</button>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-warning btn-lg btn-block" routerLink="/transactions">Cancel</a>
             </div>
         </div>
     </div>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DateRangeService } from 'src/app/services/date-range.service';
 import { TransactionService } from 'src/app/services/transaction.service';
+import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { Transaction } from 'src/app/shared/model/transaction';
 import { TransactionList } from 'src/app/shared/model/transaction-list';
@@ -20,12 +22,16 @@ export class TransactionsComponent implements OnInit {
     toDate: ''
   }
 
-  constructor(public transactionService: TransactionService, public router: Router) { }
+  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService, public router: Router) { }
   
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers'
     };
+    this.dateRangeService.dateRange().subscribe(value => {
+      this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
+      this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
+    })
     this.loadTransactions();
   }
 
