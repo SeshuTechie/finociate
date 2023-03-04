@@ -50,6 +50,7 @@ export class TransactionsComponent implements OnInit {
         this.loadTransactions();
       });
     }
+    return false;
   }
 
   editTransaction(id: any) {

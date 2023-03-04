@@ -56,11 +56,12 @@
                 <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable" width="100%"
                     cellspacing="0">
                     <thead>
-                        <tr bgColor = "#2874a6" >
+                        <tr style="color: #fff; background:#2874a6;">
                             <th>Date</th>
                             <th>Type</th>
                             <th>Description</th>
                             <th>Amount</th>
+                            <th>Account</th>
                             <th>Place</th>
                             <th>Category</th>
                             <th>Sub-Category</th>
@@ -69,16 +70,17 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let transaction of transactions" (click) = "editTransaction(transaction.id)"
-                        [ngStyle]="{'background-color':transaction.type == 'credit' ? '#fadbd8' : ' #d5f5e3' }">
+                        [ngStyle]="{'background-color':transaction.type == 'credit' ? '#e8f8f5' : '#fdedec' }">
                             <td>{{ transaction.date }}</td>
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.description }}</td>
                             <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.account }}</td>
                             <td>{{ transaction.store }}</td>
                             <td>{{ transaction.category }}</td>
                             <td>{{ transaction.subCategory }}</td>
                             <td>
-                                <a (click)="deleteTransaction(transaction.id)" class="btn btn-danger btn-circle">
+                                <a (click)="deleteTransaction(transaction.id);$event.stopPropagation()" class="btn btn-danger btn-circle">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>

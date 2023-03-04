@@ -14,6 +14,8 @@ import { NewTransactionComponent } from '../pages/new-transaction/new-transactio
 import { DashboardModule } from '../pages/dashboard/dashboard.module';
 import { RefDataComponent } from '../pages/ref-data/ref-data.component';
 import { NewRefDataComponent } from '../pages/new-ref-data/new-ref-data.component';
+import { BudgetComponent } from '../pages/budget/budget.component';
+import { BudgetItemComponent } from '../pages/budget-item/budget-item.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { NewRefDataComponent } from '../pages/new-ref-data/new-ref-data.componen
     UserComponent,
     NewTransactionComponent,
     RefDataComponent,
-    NewRefDataComponent
+    NewRefDataComponent,
+    BudgetComponent,
+    BudgetItemComponent
   ],
   imports: [
     CommonModule,
