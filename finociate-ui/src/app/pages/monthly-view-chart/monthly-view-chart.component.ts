@@ -54,7 +54,7 @@ export class MonthlyViewChartComponent implements OnInit {
           savings.push(summary.totalSavings);
         });
         let datasets = [
-          { data: income, label: 'Income' },
+          { data: income, label: 'Inflow' },
           { data: spend, label: 'Spend' },
           { data: savings, label: 'Savings' }
         ];

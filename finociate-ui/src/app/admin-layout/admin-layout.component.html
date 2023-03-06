@@ -1,17 +1,14 @@
-<div id="wrapper">
-    <sidebar></sidebar>
+<navbar></navbar>
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-            <navbar></navbar>
-        </div>
-
-        <div class="container-fluid">
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <sidebar></sidebar>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 overflow-auto">
+            <!-- Main Content -->
             <router-outlet></router-outlet>
-        </div>
-        <comp-footer></comp-footer>
+            <comp-footer></comp-footer>
+        </main>
     </div>
 </div>

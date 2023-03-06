@@ -1,33 +1,22 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-  <!-- Sidebar - Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="bi bi-cash-coin"></i>
-    </div>
-    <div class="sidebar-brand-text mx-3">Finociate</div>
-  </a>
+  <div class="position-sticky pt-3">
+    <ul class="nav flex-column">
 
-  <!-- Divider -->
-  <hr class="sidebar-divider my-0">
-
-  <li *ngFor="let menuItem of menuItems" class="nav-item">
-    <a class="nav-link" [routerLink]="[menuItem.path]">
-      <i class="bi {{menuItem.icon}}"></i>
-      <span>{{menuItem.title}}</span>
-    </a>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link">
-      <i class="bi bi-gear"></i>
-      <span>Settings</span>
-    </a>
-  </li>
-  <ul>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/ref-data">
-        <span>&emsp;Reference Data</span>
-      </a>
-    </li>
-  </ul>
-</ul>
+      <li *ngFor="let menuItem of menuItems" class="nav-item">
+        <a class="nav-link" [routerLink]="[menuItem.path]">
+          <i class="bi {{menuItem.icon}}"></i>{{menuItem.title}}
+        </a>
+      </li>
+      <hr class="sidebar-divider">
+      <li class="nav-item">
+        <i class="bi bi-gear"></i>
+        <span>Settings</span>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/ref-data">
+              <span>&emsp;Reference Data</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>

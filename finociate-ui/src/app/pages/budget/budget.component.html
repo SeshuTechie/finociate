@@ -1,137 +1,128 @@
 <!-- Begin Page Content -->
-<div class="overflow-auto">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Budget</h1>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <input type="text" [(ngModel)]="showBudgetFrom" class="form-control"
-                        placeholder="Date dd-MM-yyyy" name="showFromDate">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <a (click)="loadBudget()" class="btn btn-primary">
-                        Show Budget
-                    </a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="input-group">
-                    <input type="text" [(ngModel)]="createBudgetFrom" class="form-control bg-light border-0 small" placeholder="from MM-YYYY" aria-label="createFromDate"
-                    aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <a (click)="createBudget()" class="btn btn-primary">
-                            Create From
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="form-group">
+            <input type="text" [(ngModel)]="showBudgetFrom" class="form-control" placeholder="Date dd-MM-yyyy"
+                name="showFromDate">
         </div>
+        <div class="form-group">
+            <a (click)="loadBudget()" class="btn btn-primary">
+                Show Budget
+            </a>
+        </div>
+        <div class="form-group"><span>&nbsp;</span></div>
+        <div class="form-group">
+            <input type="text" [(ngModel)]="createBudgetFrom" class="form-control bg-light border-0 small"
+                placeholder="from MM-YYYY" aria-label="createFromDate" aria-describedby="basic-addon2">
+        </div>
+        <div class="form-group">
+            <a (click)="createBudget()" class="btn btn-primary">
+                Create From
+            </a>
         </div>
     </div>
-    
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <div class="col">
-                    <h1 class="h4 mb-2 text-gray-800">Budget Summary</h1>
-                </div>
-                <div class="col">
-                    <input type="text" [(ngModel)]="budgetMonth" class="form-control"
-                        placeholder="Date dd-MM-yyyy" name="fromDate" disabled="">
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable1" width="100%"
-                    cellspacing="0">
-                    <thead>
-                        <tr style="color: #fff; background:#2874a6;">
-                            <th>Account</th>
-                            <th>Brought</th>
-                            <th>Inflow</th>
-                            <th>Outflow</th>
-                            <th>Transfer In</th>
-                            <th>Transfer Out</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let summaryItem of budget.summaryItems"
-                            [ngStyle]="{'background-color': getSummaryItemColor(summaryItem.balance) }" >
-                            <td>{{ summaryItem.account }}</td>
-                            <td>{{ summaryItem.brought }}</td>
-                            <td>{{ summaryItem.inflow }}</td>
-                            <td>{{ summaryItem.outflow }}</td>
-                            <td>{{ summaryItem.transferIn }}</td>
-                            <td>{{ summaryItem.transferOut }}</td>
-                            <td>{{ summaryItem.balance }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <div class="row">
-                <div class="col">
-                    <div class="col">
-                        <h1 class="h4 mb-2 text-gray-800">Budget Items</h1>
-                    </div>
-                </div>
-                <div class="col">
-                    <a (click)="addBudgetItem()" class="btn btn-primary btn-circle">
-                        <i class="bi bi-plus-square"></i>
-                    </a>
-                </div>
-                <div class="col">
-                    <input type="text" [(ngModel)]="budgetMonth" class="form-control"
-                        placeholder="Date dd-MM-yyyy" name="fromDate" disabled="">
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable2" width="100%"
-                    cellspacing="0">
-                    <thead>
-                        <tr style="color: #fff; background:#2874a6;">
-                            <th>Account</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Description</th>
-                            <th>Particulars</th>
-                            <th>Category</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let budgetItem of budget.budgetItems" (click) = "editBudgetItem(budgetItem.id)"
-                            [ngStyle]="{'background-color': getItemColor(budgetItem.type) }">
-                            <td>{{ budgetItem.account }}</td>
-                            <td>{{ budgetItem.type }}</td>
-                            <td>{{ budgetItem.amount }}</td>
-                            <td>{{ budgetItem.description }}</td>
-                            <td>{{ budgetItem.particulars }}</td>
-                            <td>{{ budgetItem.category }}</td>
-                            <td>
-                                <a (click)="deleteBudgetItem(budgetItem.id);$event.stopPropagation()" class="btn btn-danger btn-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
 </div>
-<!-- /.container-fluid -->
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div class="row">
+            <div class="col">
+                <h1 class="h4 mb-2 text-gray-800">Budget Summary</h1>
+            </div>
+            <div class="col">
+                <input type="text" [(ngModel)]="budgetMonth" class="form-control" placeholder="Date dd-MM-yyyy"
+                    name="fromDate" disabled="">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable1" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr style="color: #fff; background:#2874a6;">
+                        <th>Account</th>
+                        <th>Brought</th>
+                        <th>Inflow</th>
+                        <th>Outflow</th>
+                        <th>Transfer In</th>
+                        <th>Transfer Out</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let summaryItem of budget.summaryItems"
+                        [ngStyle]="{'background-color': getSummaryItemColor(summaryItem.balance) }">
+                        <td>{{ summaryItem.account }}</td>
+                        <td>{{ summaryItem.brought }}</td>
+                        <td>{{ summaryItem.inflow }}</td>
+                        <td>{{ summaryItem.outflow }}</td>
+                        <td>{{ summaryItem.transferIn }}</td>
+                        <td>{{ summaryItem.transferOut }}</td>
+                        <td>{{ summaryItem.balance }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div class="row">
+            <div class="col">
+                <div class="col">
+                    <h1 class="h4 mb-2 text-gray-800">Budget Items</h1>
+                </div>
+            </div>
+            <div class="col">
+                <a (click)="addBudgetItem()" class="btn btn-primary btn-circle">
+                    <i class="bi bi-plus-square"></i>
+                </a>
+            </div>
+            <div class="col">
+                <input type="text" [(ngModel)]="budgetMonth" class="form-control" placeholder="Date dd-MM-yyyy"
+                    name="fromDate" disabled="">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable2" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr style="color: #fff; background:#2874a6;">
+                        <th>Account</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Particulars</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let budgetItem of budget.budgetItems" (click)="editBudgetItem(budgetItem.id)"
+                        [ngStyle]="{'background-color': getItemColor(budgetItem.type) }">
+                        <td>{{ budgetItem.account }}</td>
+                        <td>{{ budgetItem.type }}</td>
+                        <td>{{ budgetItem.amount }}</td>
+                        <td>{{ budgetItem.description }}</td>
+                        <td>{{ budgetItem.particulars }}</td>
+                        <td>{{ budgetItem.category }}</td>
+                        <td>
+                            <a (click)="deleteBudgetItem(budgetItem.id);$event.stopPropagation()"
+                                class="btn btn-danger btn-circle">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
