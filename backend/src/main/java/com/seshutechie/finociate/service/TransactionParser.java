@@ -7,11 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,9 +19,8 @@ import java.util.regex.Pattern;
 public class TransactionParser {
     private static final Logger logger = LoggerFactory.getLogger(TransactionParser.class);
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
-    class DateModel {
-        Date date;
+    static class DateModel {
+        LocalDate date;
         int start;
         int end;
 
@@ -43,13 +41,12 @@ public class TransactionParser {
         if(dates != null && dates.size() > 0) {
             LocalDateModel dateModel = dates.get(0);
             logger.debug("DateModel Found: {}", dateModel);
-            DateFormat df = new SimpleDateFormat(dateModel.getIdentifiedDateFormat());
             try {
                 result = new DateModel();
-                result.date = df.parse(dateModel.getOriginalText());
+                result.date = LocalDate.parse(dateModel.getOriginalText(), DateTimeFormatter.ofPattern(dateModel.getIdentifiedDateFormat()));
                 result.start = dateModel.getStart();
                 result.end = dateModel.getEnd();
-            } catch (ParseException e) {
+            } catch (DateTimeParseException | IllegalArgumentException e) {
                 logger.error("Parse exception while finding date", e);
             }
         } else {
@@ -79,7 +76,6 @@ public class TransactionParser {
 
         DateModel dateModel = extractDate(text);
         transaction.setDate(dateModel.date);
-//        transaction.setDateString(dateFormat.format(dateModel.date));
 
         double amount = extractAmount(text, dateModel.start, dateModel.end);
         transaction.setAmount(amount);

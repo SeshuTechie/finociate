@@ -8,6 +8,20 @@
       </li>
       <hr class="sidebar-divider">
       <li class="nav-item">
+        <a class="nav-link" routerLink="/reports">
+          <i class="bi bi-gear"></i>
+          <span>Reports</span>
+        </a>
+        <ul class="nav flex-column">
+          <li *ngFor="let reportDef of reportDefs" class="nav-item">
+            <a class="nav-link" routerLink="/report-data/{{reportDef.id}}">
+              <span>&emsp;{{reportDef.name}}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <hr class="sidebar-divider">
+      <li class="nav-item">
         <i class="bi bi-gear"></i>
         <span>Settings</span>
         <ul class="nav flex-column">

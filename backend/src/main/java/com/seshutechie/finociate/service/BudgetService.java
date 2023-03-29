@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
@@ -34,13 +33,16 @@ public class BudgetService {
 
     private void validateBudgetItem(BudgetItem budgetItem) {
         if (budgetItem.getDate() == null) {
+            logger.error("Date is missing on Budget Item");
             throw new InvalidDataException("Date is missing on Budget Item");
         }
         if (budgetItem.getType() == null || budgetItem.getType().trim().isEmpty()) {
+            logger.error("Type is missing on Budget Item");
             throw new InvalidDataException("Type is missing on Budget Item");
         }
         if (BudgetTypes.TRANSFER.equals(budgetItem.getType())) {
             if (budgetItem.getParticulars() == null || budgetItem.getParticulars().isEmpty()) {
+                logger.error("Transfer particulars (To account) missing");
                 throw new InvalidDataException("Transfer particulars (To account) missing");
             }
         }
@@ -48,6 +50,7 @@ public class BudgetService {
             List<BudgetItem> items = budgetItemRepo.findByDateAndAccountAndType(budgetItem.getDate(),
                     budgetItem.getAccount(), budgetItem.getType());
             if (items != null && items.size() > 0) {
+                logger.error("Brought already exists for " + budgetItem.getAccount());
                 throw new InvalidDataException("Brought already exists for " + budgetItem.getAccount());
             }
         }
@@ -63,10 +66,11 @@ public class BudgetService {
     }
 
     public BudgetItem deleteBudgetItem(String id) {
-        BudgetItem budgetItem = null;
+        BudgetItem budgetItem;
         try {
             budgetItem = budgetItemRepo.findById(id).orElseThrow();
         } catch (NoSuchElementException ex) {
+            logger.error("No Budget item found to delete: " + id);
             throw new BudgetItemNotFoundException(id);
         }
         budgetItemRepo.deleteById(id);
@@ -84,28 +88,23 @@ public class BudgetService {
             for (BudgetItem budgetItem: budgetItems) {
                 BudgetSummaryItem summaryItem = getSummaryItem(summaryItemMap, budgetItem.getAccount());
                 switch (budgetItem.getType()) {
-                    case BudgetTypes.CREDIT:
-                        summaryItem.setInflow(summaryItem.getInflow() + budgetItem.getAmount());
-                        break;
-                    case BudgetTypes.DEBIT:
-                        summaryItem.setOutflow(summaryItem.getOutflow() + budgetItem.getAmount());
-                        break;
-                    case BudgetTypes.BROUGHT:
-                        summaryItem.setBrought(budgetItem.getAmount());
-                        break;
-                    case BudgetTypes.TRANSFER:
+                    case BudgetTypes.CREDIT -> summaryItem.setInflow(summaryItem.getInflow() + budgetItem.getAmount());
+                    case BudgetTypes.DEBIT -> summaryItem.setOutflow(summaryItem.getOutflow() + budgetItem.getAmount());
+                    case BudgetTypes.BROUGHT -> summaryItem.setBrought(budgetItem.getAmount());
+                    case BudgetTypes.TRANSFER -> {
                         summaryItem.setTransferOut(summaryItem.getTransferOut() + budgetItem.getAmount());
                         BudgetSummaryItem refAccountSummary = getSummaryItem(summaryItemMap, budgetItem.getParticulars());
                         refAccountSummary.setTransferIn(refAccountSummary.getTransferIn() + budgetItem.getAmount());
-                        break;
+                    }
                 }
             }
-            summaryItemMap.values().stream().forEach(summaryItem -> {
+            summaryItemMap.values().forEach(summaryItem -> {
                 summaryItems.add(summaryItem);
                 summaryItem.setBalance(summaryItem.getBrought() + summaryItem.getInflow() + summaryItem.getTransferIn()
                         - summaryItem.getTransferOut() - summaryItem.getOutflow());
             });
             budget.setSummaryItems(summaryItems);
+            budget.setDate(fromDate);
         }
         return budget;
     }

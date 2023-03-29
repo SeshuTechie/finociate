@@ -16,6 +16,8 @@ import { RefDataComponent } from '../pages/ref-data/ref-data.component';
 import { NewRefDataComponent } from '../pages/new-ref-data/new-ref-data.component';
 import { BudgetComponent } from '../pages/budget/budget.component';
 import { BudgetItemComponent } from '../pages/budget-item/budget-item.component';
+import { ReportsComponent } from '../pages/reports/reports.component';
+import { ReportDataComponent } from '../pages/report-data/report-data.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { BudgetItemComponent } from '../pages/budget-item/budget-item.component'
     RefDataComponent,
     NewRefDataComponent,
     BudgetComponent,
-    BudgetItemComponent
+    BudgetItemComponent,
+    ReportsComponent,
+    ReportDataComponent
   ],
   imports: [
     CommonModule,

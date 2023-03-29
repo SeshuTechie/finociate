@@ -5,4 +5,5 @@ public class BudgetTypes {
     public static final String DEBIT = "debit";
     public static final String BROUGHT = "brought";
     public static final String TRANSFER = "transferTo";
+    public static final String all[] = {CREDIT, DEBIT, BROUGHT, TRANSFER};
 }

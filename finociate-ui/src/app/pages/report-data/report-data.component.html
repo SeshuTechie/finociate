@@ -1,0 +1,44 @@
+<div class="container-fluid">
+
+     <!-- Page Heading -->
+     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{reportData.name}}</h1>
+    </div>
+
+    <div *ngFor="let rowData of reportData.rowDataList" class="row">
+        <div *ngFor="let itemData of rowData.itemDataList" class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">{{itemData.title}}</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div *ngFor="let key of getKeys(itemData.itemEntries)">
+                        <span>Values for: {{key}}</span>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                  <th *ngFor="let field of itemData.groupByFields" scope="col">{{field}}</th>
+                                  <th *ngIf="isSimpleItem(itemData)">Amount</th>
+                                  <th *ngIf="isCreditDebitSavingsItem(itemData)">Credit</th>
+                                  <th *ngIf="isCreditDebitSavingsItem(itemData)">Debit</th>
+                                  <th *ngIf="isCreditDebitSavingsItem(itemData)">Savings</th>
+                                  </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let itemEntry of itemData.itemEntries[key]">
+                                  <td *ngFor="let value of itemEntry.fieldValues">{{value}}</td>
+                                  <td *ngIf="isSimpleItem(itemData)">{{itemEntry.amount}}</td>
+                                  <td *ngIf="isCreditDebitSavingsItem(itemData)">{{itemEntry.credit}}</td>
+                                  <td *ngIf="isCreditDebitSavingsItem(itemData)">{{itemEntry.debit}}</td>
+                                  <td *ngIf="isCreditDebitSavingsItem(itemData)">{{itemEntry.savings}}</td>
+                                  </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+

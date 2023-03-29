@@ -6,6 +6,8 @@ import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 import { NewRefDataComponent } from '../pages/new-ref-data/new-ref-data.component';
 import { NewTransactionComponent } from '../pages/new-transaction/new-transaction.component';
 import { RefDataComponent } from '../pages/ref-data/ref-data.component';
+import { ReportDataComponent } from '../pages/report-data/report-data.component';
+import { ReportsComponent } from '../pages/reports/reports.component';
 import { TransactionsComponent } from '../pages/transactions/transactions.component';
 import { UserComponent } from '../pages/user/user.component';
 
@@ -20,6 +22,8 @@ const routes: Routes = [
   { path: 'edit-budget-item/:id', component: BudgetItemComponent },
   { path: 'ref-data', component: RefDataComponent },
   { path: 'new-ref-data', component: NewRefDataComponent },
+  { path: 'reports', component: ReportsComponent },
+  { path: 'report-data/:id', component: ReportDataComponent },
 ];
 
 @NgModule({
