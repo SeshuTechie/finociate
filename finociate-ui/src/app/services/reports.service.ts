@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { EMPTY, Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { Globals } from '../shared/global';
+import { FilterParams } from '../shared/model/filter-params';
 import { ReportData } from '../shared/model/report-data';
 import { ReportDef } from '../shared/model/report-def';
 import { ReportDefList } from '../shared/model/report-def-list';
@@ -45,9 +46,9 @@ export class ReportsService {
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
-  getReportData(id: string): Observable<ReportData> {
+  getReportData(id: string, filterParams: FilterParams): Observable<ReportData> {
     return this.http
-      .get<ReportData>(this.apiURL + '/report/' + id)
+      .get<ReportData>(this.apiURL + '/report/' + id + '?' + ServiceHelper.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 }

@@ -4,6 +4,7 @@ import { TransactionService } from 'src/app/services/transaction.service';
 import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { TransactionSummary } from 'src/app/shared/model/transaction-summary';
+import { Globals } from 'src/app/shared/global';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,8 +26,8 @@ export class DashboardComponent implements OnInit {
     fromDate: '',
     toDate: ''
   }
-  currencySymbl = "₹";
-  currencyCode = "INR";
+  currencySymbl = Globals.CURRENCY_SYMBOL;
+  currencyCode = Globals.CURRENCY_CODE;
 
   constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService) { }
 

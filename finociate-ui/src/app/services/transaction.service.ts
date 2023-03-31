@@ -28,21 +28,21 @@ export class TransactionService {
   // HttpClient API get() method => Fetch transactions list
   getTransactions(filterParams: FilterParams): Observable<TransactionList> {
     return this.http
-      .get<TransactionList>(this.apiURL + '/transactions?' + this.getFilterString(filterParams))
+      .get<TransactionList>(this.apiURL + '/transactions?' + ServiceHelper.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API get() method => Fetch transactions summary
   getTransactionsSummary(filterParams: FilterParams): Observable<TransactionSummary> {
     return this.http
-      .get<TransactionSummary>(this.apiURL + '/transactions/summary?' + this.getFilterString(filterParams))
+      .get<TransactionSummary>(this.apiURL + '/transactions/summary?' + ServiceHelper.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
   // HttpClient API get() method => Fetch category summary
   getSpendCategoryData(filterParams: FilterParams): Observable<AmountsData> {
     return this.http
-      .get<AmountsData>(this.apiURL + '/summary/categories?' + this.getFilterString(filterParams))
+      .get<AmountsData>(this.apiURL + '/summary/categories?' + ServiceHelper.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
@@ -52,7 +52,7 @@ export class TransactionService {
         return EMPTY;
       }
       return this.http
-        .get<TransactionSummaryList>(this.apiURL + '/summary/monthly?' + this.getFilterString(filterParams))
+        .get<TransactionSummaryList>(this.apiURL + '/summary/monthly?' + ServiceHelper.getFilterString(filterParams))
         .pipe(retry(1), catchError(ServiceHelper.handleError));
     }
 
@@ -101,19 +101,6 @@ export class TransactionService {
     return this.http
       .delete<Transaction>(this.apiURL + '/transaction/' + id, this.httpOptions)
       .pipe(retry(1), catchError(ServiceHelper.handleError));
-  }
-
-
-  getFilterString(filterParams: FilterParams) {
-    let filter = 'x=1';
-    if (filterParams.fromDate != '') {
-      filter += '&fromDate=' + filterParams.fromDate;
-    }
-    if (filterParams.toDate != '') {
-      filter += '&toDate=' + filterParams.toDate;
-    }
-    console.log(filter);
-    return filter;
   }
 }
 

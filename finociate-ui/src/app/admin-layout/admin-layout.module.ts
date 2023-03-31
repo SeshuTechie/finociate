@@ -18,6 +18,7 @@ import { BudgetComponent } from '../pages/budget/budget.component';
 import { BudgetItemComponent } from '../pages/budget-item/budget-item.component';
 import { ReportsComponent } from '../pages/reports/reports.component';
 import { ReportDataComponent } from '../pages/report-data/report-data.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ReportDataComponent } from '../pages/report-data/report-data.component'
     FooterModule,
     DataTablesModule,
     FormsModule,
-    DashboardModule
+    DashboardModule,
+    NgChartsModule
   ]
 })
 export class AdminLayoutModule { }

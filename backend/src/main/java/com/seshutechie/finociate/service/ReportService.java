@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 public class ReportService {
     private static final Logger logger = LoggerFactory.getLogger(ReportService.class);
-    private static final String COMMA = ",";
+    private static final String DELIM = "~_~";
     private static final String HYPHEN = "-";
 
     @Autowired
@@ -105,6 +105,7 @@ public class ReportService {
     }
 
     public ReportData getReportData(String id, FilterParameters filterOptions) {
+        logger.info("Finding report data for {}, Filter: {}", id, filterOptions);
         ReportDef reportDef = getReportDef(id);
         ReportData reportData = new ReportData();
         List<ReportRowDef> rowDefList = reportDef.getRowDefList();
@@ -259,7 +260,7 @@ public class ReportService {
         if (key == null || key.isEmpty()) {
             return null;
         }
-        String[] keys = key.split(COMMA);
+        String[] keys = key.split(DELIM, -1);
         return List.of(keys);
     }
 
@@ -276,7 +277,7 @@ public class ReportService {
                     case subCategory -> transaction.getSubCategory();
                     default -> "";
                 });
-                stringBuilder.append(COMMA);
+                stringBuilder.append(DELIM);
             });
 
         }
@@ -294,6 +295,7 @@ public class ReportService {
             case in -> Criteria.where(criteria.getField()).in(List.of(criteria.getValue().toString().split(",")));
             case nin -> Criteria.where(criteria.getField()).nin(List.of(criteria.getValue().toString().split(",")));
             case nul -> Criteria.where(criteria.getField()).isNull();
+            case nnul -> Criteria.where(criteria.getField()).isNull().not();
             case exists -> Criteria.where(criteria.getField()).exists(true);
         };
     }

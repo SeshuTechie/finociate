@@ -1,4 +1,5 @@
 import { throwError } from "rxjs";
+import { FilterParams } from "../shared/model/filter-params";
 
 export class ServiceHelper {
     // Error handling
@@ -22,4 +23,15 @@ export class ServiceHelper {
         });
     }
 
+    static getFilterString(filterParams: FilterParams) {
+        let filter = '';
+        if (filterParams.fromDate != '') {
+            filter += '&fromDate=' + filterParams.fromDate;
+        }
+        if (filterParams.toDate != '') {
+            filter += '&toDate=' + filterParams.toDate;
+        }
+        console.log(filter);
+        return filter;
+    }
 }
