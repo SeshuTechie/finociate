@@ -48,6 +48,7 @@ export class TransactionService {
 
     // HttpClient API get() method => Fetch monthly transactions summary
     getMonthlyTransactionSummary(filterParams: FilterParams): Observable<TransactionSummaryList> {
+      console.log('Trying to get Monthly Transactions', filterParams);
       if (filterParams.fromDate == '' || filterParams.toDate == '') {
         return EMPTY;
       }

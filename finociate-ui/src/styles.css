@@ -48,3 +48,11 @@
   .size-2x {
     font-size: 2rem;
   }
+
+  .nav-item>a i::before {
+    padding-right: 10px;
+  }
+
+  .nav-item>i::before {
+    padding-right: 10px;
+  }
