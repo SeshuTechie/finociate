@@ -24,6 +24,7 @@ export class BudgetItemComponent implements OnInit {
   constructor(private budgetService: BudgetService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    console.debug('Reached budget item');
     let id = this.route.snapshot.params['id'];
     if (id) {
       this.isNewMode = false;
@@ -35,7 +36,7 @@ export class BudgetItemComponent implements OnInit {
       let month = this.route.snapshot.params['month'];
       this.budgetItem.date = month;
     }
-    console.log('NewMode:', this.isNewMode);
+    console.log('NewMode:', this.isNewMode, 'BudgetItem:', this.budgetItem);
     
   }
 
@@ -53,4 +54,7 @@ export class BudgetItemComponent implements OnInit {
     });
   }
 
+  cancelBudgetItem(budgetItem: BudgetItem) {
+    this.router.navigate(['/budget'], {queryParams: {budgetMonth: budgetItem.date}});
+  }
 }

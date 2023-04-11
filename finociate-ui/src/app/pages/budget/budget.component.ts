@@ -32,7 +32,11 @@ export class BudgetComponent implements OnInit {
     let fromMonth = this.route.snapshot.queryParams['budgetMonth'];
     
     if (fromMonth) {
-      this.showBudgetFrom = fromMonth.substring(fromMonth.indexOf('-') + 1);
+      if (fromMonth.split('-').length == 3) {
+        this.showBudgetFrom = fromMonth.substring(fromMonth.indexOf('-') + 1);
+      } else {
+        this.showBudgetFrom = fromMonth;
+      }
     } else {
       let month = dayjs().startOf('month');
       this.showBudgetFrom = month.month() + '-' + month.year();
@@ -46,10 +50,11 @@ export class BudgetComponent implements OnInit {
     return this.budgetService.getBudget('1-' + this.showBudgetFrom).subscribe((data: Budget) => {
       if (data) {
         this.budget = data;
-        this.budgetMonth = this.showBudgetFrom;
       } else {
+        this.budget = {budgetItems: [], summaryItems: []};
         alert('No budget available for ' + this.showBudgetFrom);
       }
+      this.budgetMonth = this.showBudgetFrom;
       console.log("Budget", data);
     });
   }
@@ -81,7 +86,9 @@ export class BudgetComponent implements OnInit {
   }
 
   addBudgetItem() {
-    this.router.navigate(['/new-budget-item/' + this.budgetMonth]);
+    let uri = '/new-budget-item/' + (this.budgetMonth == '' ? this.showBudgetFrom : this.budgetMonth);
+    console.log('trying to load', uri);
+    this.router.navigate([uri]);
   }
 
   getItemColor(type: string) {

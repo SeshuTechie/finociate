@@ -6,7 +6,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <form #filterFrom="ngForm" (ngSubmit)="loadTransactions()">
+            <form #filterFrom="ngForm" (ngSubmit)="loadTransactions(true)">
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <a class="btn btn-primary btn-circle" (click)="loadTransactions()">
+                    <a class="btn btn-primary btn-circle" (click)="loadTransactions(true)">
                         <i class="bi bi-filter-square"></i>
                     </a>
                 </div>
@@ -53,7 +53,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable" width="100%"
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered" width="100%"
                     cellspacing="0">
                     <thead>
                         <tr style="color: #fff; background:#2874a6;">
@@ -70,11 +70,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let transaction of transactions" (click) = "editTransaction(transaction.id)"
-                        [ngStyle]="{'background-color':transaction.type == 'credit' ? '#e8f8f5' : '#fdedec' }">
+                        [ngStyle]="{'background-color': getTransactionColor(transaction) }">
                             <td>{{ transaction.date }}</td>
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.description }}</td>
-                            <td>{{ transaction.amount }}</td>
+                            <td  class="text-end">{{ transaction.amount | currency: currencyCode}}</td>
                             <td>{{ transaction.account }}</td>
                             <td>{{ transaction.store }}</td>
                             <td>{{ transaction.category }}</td>

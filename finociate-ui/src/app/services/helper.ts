@@ -31,7 +31,7 @@ export class ServiceHelper {
         if (filterParams.toDate != '') {
             filter += '&toDate=' + filterParams.toDate;
         }
-        console.log(filter);
+        console.log('Filters', filter);
         return filter;
     }
 }
