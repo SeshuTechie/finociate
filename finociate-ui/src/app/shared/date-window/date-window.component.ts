@@ -12,7 +12,7 @@ export class DateWindowComponent implements OnInit {
   selected: any;// = {startDate: CommonUtil.getFY(0)?.startOf('month'), endDate: dayjs()};
   ranges: any = {
     'This FY': [CommonUtil.getFYStart(0)?.startOf('month'), dayjs()],
-    'Last FY': [CommonUtil.getFYStart(-1)?.startOf('month'), CommonUtil.getFYEnd(-1)?.startOf('month').subtract(1, 'day')],
+    'Last FY': [CommonUtil.getFYStart(-1)?.startOf('month'), CommonUtil.getFYStart(0)?.startOf('month').subtract(1, 'day')],
     'This Year': [dayjs().startOf('year'), dayjs()],
     'Last Year': [dayjs().subtract(1, 'year').startOf('year'), dayjs().subtract(1, 'year').endOf('year')],
     'Last 30 Days': [dayjs().subtract(29, 'days'), dayjs()],
