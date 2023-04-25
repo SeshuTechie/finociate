@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: finociate-app
+  namespace: "finociate-dev"
+  labels: 
+    app: "finociate-app"
+spec:
+  selector:
+    matchLabels:
+      app: finociate-app
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: finociate-app
+    spec:
+      containers:
+        - name: finociate-app
+          image: finociate:v0.1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+          - name: SPRING_DATA_MONGODB_HOST
+            value: mongo-db
+          - name: SPRING_DATA_MONGODB_PASSWORD
+            value: "secret"

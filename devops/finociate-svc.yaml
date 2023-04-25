@@ -1,0 +1,16 @@
+apiVersion: "v1"
+kind: "Service"
+metadata: 
+  name: "finociate-app"
+  namespace: "finociate-dev"
+  labels: 
+    app: "finociate-app"
+spec: 
+  ports: 
+    - 
+      name: "finociate-app"
+      port: 8080
+      nodePort: 30388
+  type: "NodePort"
+  selector: 
+    app: finociate-app

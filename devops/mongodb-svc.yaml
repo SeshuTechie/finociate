@@ -1,0 +1,18 @@
+apiVersion: "v1"
+kind: "Service"
+metadata: 
+  name: "mongo-db"
+  namespace: "finociate-dev"
+  labels: 
+    app: "mongo-db"
+spec: 
+  externalTrafficPolicy: "Local"
+  ports: 
+    - 
+      name: "mongodb"
+      port: 27017
+      nodePort: 30332
+  type: "NodePort"
+  selector: 
+    app: "mongo-db"
+ 
