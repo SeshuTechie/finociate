@@ -58,12 +58,21 @@
                     <tr *ngFor="let summaryItem of budget.summaryItems"
                         [ngStyle]="{'background-color': getSummaryItemColor(summaryItem.balance) }">
                         <td>{{ summaryItem.account }}</td>
-                        <td>{{ summaryItem.brought }}</td>
-                        <td>{{ summaryItem.inflow }}</td>
-                        <td>{{ summaryItem.outflow }}</td>
-                        <td>{{ summaryItem.transferIn }}</td>
-                        <td>{{ summaryItem.transferOut }}</td>
-                        <td>{{ summaryItem.balance }}</td>
+                        <td class="currency">{{ summaryItem.brought  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.inflow  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.outflow  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.transferIn  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.transferOut  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.balance  | currency:currencyCode}}</td>
+                    </tr>
+                    <tr *ngIf="totalSummary.balance != 0"  [ngStyle]="{'background-color': getSummaryItemColor(totalSummary.balance), 'font-weight': 'bold' }">
+                        <td>{{ totalSummary.account }}</td>
+                        <td class="currency">{{ totalSummary.brought  | currency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.inflow  | currency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.outflow  | currency:currencyCode}}</td>
+                        <td class="currency"></td>
+                        <td class="currency"></td>
+                        <td class="currency">{{ totalSummary.balance  | currency:currencyCode}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -107,10 +116,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let budgetItem of budget.budgetItems" (click)="editBudgetItem(budgetItem.id)"
-                        [ngStyle]="{'background-color': getItemColor(budgetItem.type) }">
+                        [ngStyle]="{'background-color': getItemColor(budgetItem) }">
                         <td>{{ budgetItem.account }}</td>
                         <td>{{ budgetItem.type }}</td>
-                        <td>{{ budgetItem.amount }}</td>
+                        <td class="currency">{{ budgetItem.amount  | currency:currencyCode}}</td>
                         <td>{{ budgetItem.description }}</td>
                         <td>{{ budgetItem.particulars }}</td>
                         <td>{{ budgetItem.category }}</td>

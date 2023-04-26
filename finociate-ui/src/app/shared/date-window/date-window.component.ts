@@ -26,7 +26,8 @@ export class DateWindowComponent implements OnInit {
 
   onDateWindowChanged(range: any) {
     console.log('Date Range Changed', range.startDate, range.endDate);
-    this.dateRangeService.changeRange(range);
+    if (range.startDate) {
+      this.dateRangeService.changeRange(range);
+    }
   }
 }
-

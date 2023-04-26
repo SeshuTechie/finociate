@@ -6,7 +6,6 @@
             Budget Item
         </div>
         <div class="card-body">
-            <hr>
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">
@@ -52,7 +51,7 @@
                 <div class="col">
                     <div class="form-group">
                         <select class="form-control" [(ngModel)]="budgetItem.category" id="type">
-                            <option value="" disabled selected>Select Type</option>
+                            <option value="" disabled selected>Select Category</option>
                             <option value="salary">Salary</option>
                             <option value="savings">Savings</option>
                         </select>
@@ -60,16 +59,21 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group" *ngIf="isNewMode">
-                    <button class="btn btn-success btn-lg btn-block" (click)="addBudgetItem(budgetItem)">Add
-                        Budget Item</button>
+                <div class="col">
+                    <div class="form-group" *ngIf="isNewMode">
+                        <button class="btn btn-success btn-lg btn-block" (click)="addBudgetItem(budgetItem)">Add
+                            Budget Item</button>
+                    </div>
+                    <div class="form-group" *ngIf="!isNewMode">
+                        <button class="btn btn-success btn-lg btn-block" (click)="editBudgetItem(budgetItem)">Update
+                            Budget Item</button>
+                    </div>
                 </div>
-                <div class="form-group" *ngIf="!isNewMode">
-                    <button class="btn btn-success btn-lg btn-block" (click)="editBudgetItem(budgetItem)">Update
-                        Budget Item</button>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-warning btn-lg btn-block" (click)="cancelBudgetItem(budgetItem)">Cancel</button>
+                <div class="col">
+                    <div class="form-group">
+                        <button class="btn btn-warning btn-lg btn-block"
+                            (click)="cancelBudgetItem(budgetItem)">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>

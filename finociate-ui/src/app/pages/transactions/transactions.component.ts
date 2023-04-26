@@ -7,7 +7,7 @@ import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { Transaction } from 'src/app/shared/model/transaction';
 import { TransactionList } from 'src/app/shared/model/transaction-list';
-import {DataTableDirective} from 'angular-datatables';
+import { DataTableDirective } from 'angular-datatables';
 import { Globals } from 'src/app/shared/global';
 
 // declare var $:any;
@@ -17,7 +17,7 @@ import { Globals } from 'src/app/shared/global';
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css']
 })
-export class TransactionsComponent implements OnInit, OnDestroy {  
+export class TransactionsComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -27,9 +27,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     toDate: ''
   }
   currencyCode = Globals.CURRENCY_CODE;
-  
+
   constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService, public router: Router) { }
-  
+
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers'
@@ -45,22 +45,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-       dtInstance.destroy();
-       this.dtTrigger.next(0);
-   });
-  }
-
   // Get transactions list
   loadTransactions(render: boolean) {
+    console.log("Loading Transactions...", this.filterParams);
     this.transactions = [];
     return this.transactionService.getTransactions(this.filterParams).subscribe((data: TransactionList) => {
       this.transactions = data.transactions;
-      console.log("Transactions", data);
-      if (render) {
-        this.rerender();
-      }
+      this.transactions.sort(this.compareTransactions);
+      console.log("Transactions count", this.transactions.length);
     });
   }
   // Delete transaction
@@ -79,5 +71,29 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   getTransactionColor(transaction: Transaction) {
     return transaction.type == 'credit' ? '#e8f8f5' : transaction.category == 'Savings' ? '#f4ecf7' : '#fdedec';
+  }
+
+  compareTransactions(a: Transaction, b: Transaction) {
+    if (CommonUtil.compareDates(a.date, b.date) > 0) {
+      return 1;
+    } else if (CommonUtil.compareDates(a.date, b.date) < 0) {
+      return -1;
+    }
+    if (a.account > b.account) {
+      return 1;
+    } else if (a.account < b.account) {
+      return -1;
+    }
+    if (a.type > b.type) {
+      return 1;
+    } else if (a.type < b.type) {
+      return -1;
+    }
+    if (a.description > b.description) {
+      return 1;
+    } else if (a.description < b.description) {
+      return -1;
+    }
+    return 0;
   }
 }

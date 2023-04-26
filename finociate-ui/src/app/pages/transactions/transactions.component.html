@@ -74,7 +74,7 @@
                             <td>{{ transaction.date }}</td>
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.description }}</td>
-                            <td  class="text-end">{{ transaction.amount | currency: currencyCode}}</td>
+                            <td class="currency">{{ transaction.amount | currency: currencyCode}}</td>
                             <td>{{ transaction.account }}</td>
                             <td>{{ transaction.store }}</td>
                             <td>{{ transaction.category }}</td>

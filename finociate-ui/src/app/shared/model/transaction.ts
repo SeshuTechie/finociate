@@ -2,7 +2,7 @@ export interface Transaction {
     id?: string;
     description: string,
     amount: number,
-    date: String,
+    date: string,
     type: string,
     account: string,
     category: string,

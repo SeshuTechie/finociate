@@ -21,4 +21,12 @@ export class CommonUtil {
         }
         return '';
     }
+
+    static compareDates(d1: string, d2: string) {
+        let parts = d1.split('-');
+        let n1 = Number(parts[2] + parts[1] + parts[0]);
+        parts = d2.split('-');
+        let n2 = Number(parts[2] + parts[1] + parts[0]);
+        return n1 - n2;
+    }
 }

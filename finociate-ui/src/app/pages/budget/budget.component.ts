@@ -4,6 +4,9 @@ import dayjs, { Dayjs } from 'dayjs';
 import { BudgetService } from 'src/app/services/budget.service';
 import { Budget } from 'src/app/shared/model/budget';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { Globals } from 'src/app/shared/global';
+import { BudgetSummaryItem } from 'src/app/shared/model/budget-summary-item';
+import { BudgetItem } from 'src/app/shared/model/budget-item';
 
 dayjs.extend(customParseFormat);
 
@@ -18,10 +21,12 @@ export class BudgetComponent implements OnInit {
     budgetItems: [],
     summaryItems: []
   };
+  totalSummary!: BudgetSummaryItem;
   budgetMonth = '';
   showBudgetFrom = '';
   createBudgetFrom = '';
-
+  currencyCode = Globals.CURRENCY_CODE;
+  
   constructor(public budgetService: BudgetService, public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -39,7 +44,7 @@ export class BudgetComponent implements OnInit {
       }
     } else {
       let month = dayjs().startOf('month');
-      this.showBudgetFrom = month.month() + '-' + month.year();
+      this.showBudgetFrom = (month.month() + 1) + '-' + month.year();
     }
 
     console.log('fromMonth: ', fromMonth, 'showBudgetFrom', this.showBudgetFrom);
@@ -50,6 +55,8 @@ export class BudgetComponent implements OnInit {
     return this.budgetService.getBudget('1-' + this.showBudgetFrom).subscribe((data: Budget) => {
       if (data) {
         this.budget = data;
+        this.sortData();
+        this.computeTotalSummary();
       } else {
         this.budget = {budgetItems: [], summaryItems: []};
         alert('No budget available for ' + this.showBudgetFrom);
@@ -91,14 +98,14 @@ export class BudgetComponent implements OnInit {
     this.router.navigate([uri]);
   }
 
-  getItemColor(type: string) {
+  getItemColor(item: BudgetItem) {
     let color = 'white';
-    switch(type) {
+    switch(item.type) {
       case 'credit':
         color = '#e8f8f5';
         break;
       case 'debit':
-        color = '#fdedec';
+        color = item.category == 'savings' ? '#f4ecf7' : '#fdedec';
         break;
       case 'brought':
         color = '#ebf5fb';
@@ -113,4 +120,47 @@ export class BudgetComponent implements OnInit {
   getSummaryItemColor(balance: number) {
     return balance > 0 ? '#e8f8f5' : '#fdedec';
   }
+
+  computeTotalSummary() {
+    this.totalSummary = {
+      account: 'Total',
+      balance: 0,
+      brought: 0,
+      inflow: 0,
+      outflow: 0,
+      transferIn: 0,
+      transferOut: 0,
+    };
+    this.budget.summaryItems.forEach(item => {
+      this.totalSummary.balance += item.balance;
+      this.totalSummary.brought += item.brought;
+      this.totalSummary.inflow += item.inflow;
+      this.totalSummary.outflow += item.outflow;
+    });
+  }
+
+  sortData() {
+    this.budget.summaryItems.sort((a, b) => (a.account > b.account) ? 1 : 0)
+    this.budget.budgetItems.sort(this.compareBudgetItems)
+  }
+
+  compareBudgetItems(a: BudgetItem, b: BudgetItem ) {
+    if ( a.account > b.account ){
+      return 1;
+    } else if ( a.account < b.account ){
+      return -1;
+    }
+    if ( a.type > b.type ){
+      return 1;
+    } else if ( a.type < b.type ){
+      return -1;
+    }
+    if ( a.description > b.description ){
+      return 1;
+    } else if ( a.description < b.description ){
+      return -1;
+    }
+    return 0;
+  }
 }
+
