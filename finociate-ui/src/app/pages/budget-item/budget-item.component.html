@@ -15,7 +15,10 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="budgetItem.account" class="form-control" placeholder="Account">
+                        <input type="text" [(ngModel)]="budgetItem.account" class="form-control" placeholder="Account" list="refDataAccounts">
+                        <datalist id="refDataAccounts">
+                            <option *ngFor="let item of accounts" [value]="item">{{item}}</option>
+                         </datalist>
                     </div>
                 </div>
                 <div class="col">

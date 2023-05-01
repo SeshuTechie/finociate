@@ -51,13 +51,20 @@ public class RefDataService {
     }
 
     public RefData deleteRefData(String id) {
+        RefData refData = getRefData(id);
+        if (refData != null) {
+            refDataRepo.deleteById(id);
+        }
+        return refData;
+    }
+
+    public RefData getRefData(String id) {
         RefData refData = null;
         try {
             refData = refDataRepo.findById(id).orElseThrow();
         } catch (NoSuchElementException ex) {
             throw new RefDataNotFoundException(id);
         }
-        refDataRepo.deleteById(id);
         return refData;
     }
 }

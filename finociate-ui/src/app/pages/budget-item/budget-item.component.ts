@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetService } from 'src/app/services/budget.service';
+import { RefDataService } from 'src/app/services/ref-data.service';
 import { BudgetItem } from 'src/app/shared/model/budget-item';
+import { RefDataTypes } from 'src/app/shared/model/ref-data-types';
 
 @Component({
   selector: 'app-budget-item',
@@ -20,10 +22,13 @@ export class BudgetItemComponent implements OnInit {
     category: '',
     particulars: ''
   };
+  accounts!: string[];
 
-  constructor(private budgetService: BudgetService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private budgetService: BudgetService, private refDataService: RefDataService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.accounts = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.account]);
+
     console.debug('Reached budget item');
     let id = this.route.snapshot.params['id'];
     if (id) {

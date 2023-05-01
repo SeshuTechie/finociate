@@ -55,7 +55,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       console.log("Transactions count", this.transactions.length);
     });
   }
-  // Delete transaction
+
   deleteTransaction(id: any) {
     if (window.confirm('Are you sure, you want to delete? ' + id)) {
       this.transactionService.deleteTransaction(id).subscribe((data) => {

@@ -25,6 +25,10 @@ public class RefDataController {
         return new RefDataList(dataList);
     }
 
+    @GetMapping("/ref-data/{id}")
+    public RefData getRefData(@PathVariable String id) {
+        return refDataService.getRefData(id);
+    }
     @PostMapping("/ref-data")
     public RefData createRefData(@RequestBody RefData refData) {
         return refDataService.saveRefData(refData);

@@ -8,14 +8,9 @@
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">
-                        <select class="form-control" [(ngModel)]="refData.key" id="key">.
+                        <select class="form-control" [(ngModel)]="refData.key" id="key">
                             <option value="" disabled selected>Select Key</option>
-                            <option value="account">account</option>
-                            <option value="payment-mode">payment-mode</option>
-                            <option value="savings-type">savings-type</option>
-                            <option value="spend-type">spend-type</option>
-                            <option value="credit-type">credit-type</option>
-                            <option value="transaction-type">transaction-type</option>
+                            <option *ngFor="let item of dataKeys" [value]="item">{{item}}</option>
                         </select>
                     </div>
                 </div>

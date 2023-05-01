@@ -1,65 +1,69 @@
-﻿key,value
-transaction-type,credit
-transaction-type,debit
-spend-type,Food
-spend-type,Cash
-spend-type,CC Bill Payment
-spend-type,Clothing
-spend-type,Donation
-spend-type,Entertainment
-spend-type,General Needs
-spend-type,Gifts
-spend-type,Health
-spend-type,Household Items
-spend-type,Jewelry
-spend-type,Learning
-spend-type,Maintenance
-spend-type,Misc
-spend-type,Savings
-spend-type,Service Charge
-spend-type,Shelter
-spend-type,Transport
-spend-type,Utility Bills
-spend-type,Lifestyle
-spend-type,Travel
-savings-type,MF
-savings-type,Shares
-savings-type,LIC
-savings-type,Term Deposit
-savings-type,PPF
-savings-type,FD
-savings-type,Flexi/RD
-savings-type,Crypto Coins
-credit-type,SB Interest
-credit-type,Shares Dividend
-credit-type,MF Dividend
-credit-type,MF Withdraw
-credit-type,Shares Withdraw
-credit-type,LIC Moneyback
-credit-type,Salary
-credit-type,Other
-credit-type,Gift
-credit-type,Bonds Interest
-credit-type,Bonds Mature
-credit-type,Flexi/RD Mature
-credit-type,FD Closure
-account,ICICI SB
-account,UBI SB
-account,Canara SB
-account,Cash
-account,CITI CC
-account,HDFC SB
-account,ICICI CC
-account,MF Dividend
-account,SBI SB
-account,Shares Dividend
-payment-mode,Card
-payment-mode,UPI
-payment-mode,NEFT
-payment-mode,Auto
-payment-mode,Cash
-payment-mode,IMPS
-payment-mode,Cheque
-payment-mode,Card-Online
-payment-mode,ATM
-payment-mode,Online
+﻿key,value,description
+category,Bonds Mature,
+category,CC Bill Payment,
+category,Career Expenses,
+category,Cash,
+category,Cashback,
+category,Clothing,
+category,Consumables,
+category,Donation,
+category,Entertainment,
+category,Exchange,
+category,FD Closure,
+category,Flexi/RD Mature,
+category,Food,
+category,Function,
+category,General Needs,
+category,Gift,
+category,Health,
+category,Household Items,
+category,Interest on Deposits,
+category,Jewelry,
+category,LIC Commission,
+category,LIC Moneyback,
+category,Learning,
+category,Lifestyle,
+category,MF Withdraw,
+category,MF Withdrawal,
+category,Maintenance,
+category,Misc,
+category,Other,
+category,Property Buy,
+category,Rent,
+category,Reversal,
+category,SB Interest,
+category,Salary,
+category,Savings,
+category,Sell Shares,
+category,Service Charge,
+category,Shares Dividend,
+category,Shelter,
+category,Transport,
+category,Travel,
+category,Utility Bills,
+subcategory,Bonds Purchase,
+subcategory,Consultation,
+subcategory,Consumables,
+subcategory,Crypto Coins,
+subcategory,FD,
+subcategory,PPF,
+subcategory,Gas Subsidy,
+subcategory,General,
+subcategory,LIC,
+subcategory,MF Investment,
+subcategory,Medicine,
+subcategory,Shares Investment,
+subcategory,Stationery,
+subcategory,Micro Business,
+subcategory,Treatment,
+mode,ACH,
+mode,ATM,
+mode,Card,
+mode,Card-Online,
+mode,Online,
+mode,Auto,
+mode,Cheque,
+mode,NEFT,
+mode,RTGS,
+mode,Cash,
+mode,IMPS,

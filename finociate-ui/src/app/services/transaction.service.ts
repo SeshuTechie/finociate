@@ -103,6 +103,12 @@ export class TransactionService {
       .delete<Transaction>(this.apiURL + '/transaction/' + id, this.httpOptions)
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
+
+  getDistinctValues(field: string): Observable<string[]> {
+    return this.http
+      .get<string[]>(this.apiURL + '/distinct-values/' + field)
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
+  }
 }
 
 

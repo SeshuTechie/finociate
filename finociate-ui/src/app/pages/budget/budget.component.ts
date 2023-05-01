@@ -21,7 +21,15 @@ export class BudgetComponent implements OnInit {
     budgetItems: [],
     summaryItems: []
   };
-  totalSummary!: BudgetSummaryItem;
+  totalSummary: BudgetSummaryItem = {
+    account: 'Total',
+    balance: 0,
+    brought: 0,
+    inflow: 0,
+    outflow: 0,
+    transferIn: 0,
+    transferOut: 0
+  };
   budgetMonth = '';
   showBudgetFrom = '';
   createBudgetFrom = '';

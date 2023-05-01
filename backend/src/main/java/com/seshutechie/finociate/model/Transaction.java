@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Document(collection = "Transactions")
+@Document(collection = Collections.Transactions)
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {

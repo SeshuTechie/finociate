@@ -1,5 +1,7 @@
 package com.seshutechie.finociate.service;
 
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCursor;
 import com.seshutechie.finociate.common.AppConstants;
 import com.seshutechie.finociate.common.util.DateUtil;
 import com.seshutechie.finociate.exception.TransactionNotFoundException;
@@ -8,6 +10,7 @@ import com.seshutechie.finociate.repository.TransactionRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.mongodb.client.model.Filters.in;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingDouble;
 
@@ -28,6 +32,9 @@ public class TransactionService {
 
     @Autowired
     TransactionParser transactionParser;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public Transaction getTransaction(String id) {
         try {
@@ -140,5 +147,16 @@ public class TransactionService {
             currentStartDate = currentStartDate.plusMonths(1);
         }
         return transactionSummaryList;
+    }
+
+    public List<String> getDistinctValues(String field) {
+        DistinctIterable<String> iterable = mongoTemplate.getCollection(Collections.Transactions)
+                .distinct(field, String.class);
+        MongoCursor<String> cursor = iterable.iterator();
+        List<String> list = new ArrayList<>();
+        while (cursor.hasNext()) {
+            list.add(cursor.next());
+        }
+        return list;
     }
 }

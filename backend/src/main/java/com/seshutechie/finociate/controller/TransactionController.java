@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin("http://localhost:4200")
@@ -67,5 +68,10 @@ public class TransactionController {
     @PostMapping("/text-transaction")
     public Transaction parseTransaction(@RequestBody TransactionText transactionText) {
         return transactionService.parseTransaction(transactionText);
+    }
+
+    @GetMapping("/distinct-values/{field}")
+    public List<String> getTransactionsSummary(@PathVariable String field) {
+        return transactionService.getDistinctValues(field);
     }
 }
