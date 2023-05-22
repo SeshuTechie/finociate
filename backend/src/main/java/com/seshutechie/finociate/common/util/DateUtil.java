@@ -9,6 +9,7 @@ import java.util.TimeZone;
 public class DateUtil {
     public static final String ZONE_UTC = "UTC";
     public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_UTC);
+    public static final ZoneId ZONE_ID_SYSTEM = ZoneId.systemDefault();
 
     public static final Date getStartOfMonth(Date date) {
         Date startOfMonth = null;
@@ -49,13 +50,13 @@ public class DateUtil {
 
     public static LocalDate getLocalDate(Date date) {
         return date != null ? date.toInstant()
-                .atZone(ZONE_ID_UTC)
+                .atZone(ZONE_ID_SYSTEM)
                 .toLocalDate() : null;
     }
 
     public static Date getDate(LocalDate localDate) {
         return localDate != null ? Date.from(localDate.atStartOfDay()
-                .atZone(ZONE_ID_UTC)
+                .atZone(ZONE_ID_SYSTEM)
                 .toInstant()) : null;
     }
 
@@ -63,5 +64,20 @@ public class DateUtil {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         dateFormat.setTimeZone(TimeZone.getTimeZone(ZONE_UTC));
         return dateFormat;
+    }
+
+    public static Date getDateFrom(Date date, int diffDays) {
+        return getDate(getLocalDate(date).plusDays(diffDays));
+    }
+
+    /*
+    *  For Dirty Testing
+    * */
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(date);
+        System.out.println(getLocalDate(date));
+        System.out.println(getDateFrom(date, -1));
+        System.out.println(getDateFrom(date, 1));
     }
 }

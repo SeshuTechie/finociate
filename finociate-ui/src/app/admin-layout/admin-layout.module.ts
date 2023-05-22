@@ -19,6 +19,8 @@ import { BudgetItemComponent } from '../pages/budget-item/budget-item.component'
 import { ReportsComponent } from '../pages/reports/reports.component';
 import { ReportDataComponent } from '../pages/report-data/report-data.component';
 import { NgChartsModule } from 'ng2-charts';
+import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.component';
+import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { NgChartsModule } from 'ng2-charts';
     BudgetComponent,
     BudgetItemComponent,
     ReportsComponent,
-    ReportDataComponent
+    ReportDataComponent,
+    TextPatternsComponent,
+    NewTextPatternComponent
   ],
   imports: [
     CommonModule,

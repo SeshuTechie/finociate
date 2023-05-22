@@ -1,0 +1,52 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Transaction Text Patterns</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <form #filterFrom="ngForm" (ngSubmit)="loadTextPatterns()">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <a routerLink="/new-text-pattern" class="btn btn-primary btn-circle">
+                            <i class="bi bi-plus-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" class="table table-bordered" width="100%"
+                    cellspacing="0">
+                    <thead>
+                        <tr style="color: #fff; background:#2874a6;">
+                            <th>Name</th>
+                            <th>Identifier</th>
+                            <th>Pattern</th>
+                            <th>Date Pattern</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let textPattern of textPatterns" (click) = "editTextPattern(textPattern.id)">
+                            <td>{{ textPattern.name }}</td>
+                            <td>{{ textPattern.identifier }}</td>
+                            <td>{{ textPattern.pattern }}</td>
+                            <td>{{ textPattern.datePattern }}</td>
+                            <td>
+                                <a (click)="deleteTextPattern(textPattern.id);$event.stopPropagation()" class="btn btn-danger btn-circle">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->

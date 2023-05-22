@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="isNewMode">New Transaction Text Pattern</h1>
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="!isNewMode">Update Transaction Text Pattern</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            Transaction Text Pattern
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.name" class="form-control"
+                            placeholder="Name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.identifier" class="form-control"
+                            placeholder="Identifier">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <textarea [(ngModel)]="textPattern.pattern" class="form-control" placeholder="Transaction Text Pattern"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Example: <b>_SOMETHING_</b> My Bank Credit Card used fo INR <b>_AMOUNT_</b> on <b>_DATE_</b> at <b>_STORE_</b>.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.datePattern" class="form-control"
+                            placeholder="Date Pattern dd-MM-yyyy">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <select class="form-control" [(ngModel)]="textPattern.otherValues.type" id="type">
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="debit">Debit</option>
+                            <option value="credit">Credit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.otherValues.account" class="form-control"
+                            placeholder="Account" list="refDataAccounts">
+                        <datalist id="refDataAccounts">
+                            <option *ngFor="let item of accounts" [value]="item">{{item}}</option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.otherValues.mode" class="form-control"
+                            placeholder="Mode" list="refDataModes">
+                        <datalist id="refDataModes">
+                            <option *ngFor="let item of modes" [value]="item">{{item}}</option>
+                        </datalist>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="isNewMode">
+                <button class="btn btn-success btn-lg btn-block" (click)="addTextPattern()">Add
+                    Text Pattern</button>
+            </div>
+            <div class="form-group" *ngIf="!isNewMode">
+                <button class="btn btn-success btn-lg btn-block" (click)="editTextPattern()">Update
+                    Text Pattern</button>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-warning btn-lg btn-block" routerLink="/text-patterns">Cancel</a>
+            </div>
+        </div>
+    </div>

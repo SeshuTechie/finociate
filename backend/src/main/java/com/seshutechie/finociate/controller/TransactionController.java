@@ -65,11 +65,6 @@ public class TransactionController {
         return transactionService.deleteTransaction(id);
     }
 
-    @PostMapping("/text-transaction")
-    public Transaction parseTransaction(@RequestBody TransactionText transactionText) {
-        return transactionService.parseTransaction(transactionText);
-    }
-
     @GetMapping("/distinct-values/{field}")
     public List<String> getTransactionsSummary(@PathVariable String field) {
         return transactionService.getDistinctValues(field);

@@ -79,7 +79,7 @@ export class TransactionService {
   findTransaction(transactionText: string): Observable<Transaction> {
     return this.http
       .post<Transaction>(
-        this.apiURL + '/text-transaction',
+        this.apiURL + '/transaction-text',
         JSON.stringify({ text: transactionText }),
         this.httpOptions
       )

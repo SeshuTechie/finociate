@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: finociate-app
-          image: finociate:v0.1.1
+          image: finociate:v0.2.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -26,3 +26,5 @@ spec:
             value: mongo-db
           - name: SPRING_DATA_MONGODB_PASSWORD
             value: "secret"
+          - name: TZ
+            value: Asia/Kolkata

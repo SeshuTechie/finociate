@@ -10,6 +10,8 @@ import { ReportDataComponent } from '../pages/report-data/report-data.component'
 import { ReportsComponent } from '../pages/reports/reports.component';
 import { TransactionsComponent } from '../pages/transactions/transactions.component';
 import { UserComponent } from '../pages/user/user.component';
+import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.component';
+import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
@@ -24,6 +26,9 @@ const routes: Routes = [
   { path: 'new-ref-data', component: NewRefDataComponent },
   { path: 'reports', component: ReportsComponent },
   { path: 'report-data/:id', component: ReportDataComponent },
+  { path: 'text-patterns', component: TextPatternsComponent },
+  { path: 'new-text-pattern', component: NewTextPatternComponent },
+  { path: 'edit-text-pattern/:id', component: NewTextPatternComponent },
 ];
 
 @NgModule({

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static com.mongodb.client.model.Filters.in;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingDouble;
 
@@ -29,9 +28,6 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepo transactionRepo;
-
-    @Autowired
-    TransactionParser transactionParser;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -68,10 +64,6 @@ public class TransactionService {
         return transaction;
     }
 
-    public Transaction parseTransaction(TransactionText transactionText) {
-        return transactionParser.parseTransaction(transactionText.getText());
-    }
-
     public TransactionList getTransactions(FilterParameters filters) {
         TransactionList transactionList = new TransactionList();
         if (filters != null) {
@@ -79,7 +71,8 @@ public class TransactionService {
                 logger.debug("Getting all transactions between dates: {} {}", filters.getFromDate(), filters.getToDate());
                 transactionList.setTransactions(
                         transactionRepo.findAllByDateBetween(
-                                filters.getFromDate(), filters.getToDate()));
+                                DateUtil.getDateFrom(filters.getFromDate(), -1), // make from date inclusive
+                                DateUtil.getDateFrom(filters.getToDate(), +1))); // make to date inclusive
             } else {
                 logger.debug("No filter matches, getting all transactions");
                 transactionList.setTransactions(transactionRepo.findAll());
@@ -97,9 +90,9 @@ public class TransactionService {
         if(transactionList != null) {
             List<Transaction> transactions = transactionList.getTransactions();
             if (transactions != null) {
-                double totalCredit = transactions.stream().filter(t -> AppConstants.TYPE_CREDIT.equalsIgnoreCase(t.getType())).mapToDouble(t -> t.getAmount()).sum();
-                double totalDebit = transactions.stream().filter(t -> AppConstants.TYPE_DEBIT.equalsIgnoreCase(t.getType())).mapToDouble(t -> t.getAmount()).sum();
-                double totalSavings = transactions.stream().filter(t -> AppConstants.CATEGORY_SAVINGS.equalsIgnoreCase(t.getCategory())).mapToDouble(t -> t.getAmount()).sum();
+                double totalCredit = transactions.stream().filter(t -> AppConstants.TYPE_CREDIT.equalsIgnoreCase(t.getType())).mapToDouble(Transaction::getAmount).sum();
+                double totalDebit = transactions.stream().filter(t -> AppConstants.TYPE_DEBIT.equalsIgnoreCase(t.getType())).mapToDouble(Transaction::getAmount).sum();
+                double totalSavings = transactions.stream().filter(t -> AppConstants.CATEGORY_SAVINGS.equalsIgnoreCase(t.getCategory())).mapToDouble(Transaction::getAmount).sum();
                 transactionSummary.setTotalIncome(totalCredit);
                 transactionSummary.setTotalSpend(totalDebit - totalSavings);
                 transactionSummary.setTotalSavings(totalSavings);
@@ -152,10 +145,12 @@ public class TransactionService {
     public List<String> getDistinctValues(String field) {
         DistinctIterable<String> iterable = mongoTemplate.getCollection(Collections.Transactions)
                 .distinct(field, String.class);
-        MongoCursor<String> cursor = iterable.iterator();
-        List<String> list = new ArrayList<>();
-        while (cursor.hasNext()) {
-            list.add(cursor.next());
+        List<String> list;
+        try (MongoCursor<String> cursor = iterable.iterator()) {
+            list = new ArrayList<>();
+            while (cursor.hasNext()) {
+                list.add(cursor.next());
+            }
         }
         return list;
     }
