@@ -37,6 +37,7 @@ export class NewTextPatternComponent {
 
   accounts!: string[];
   modes!: string[];
+  categories!: string[];
 
   constructor(private textPatternService: TextPatternsService, private refDataService: RefDataService,
     private router: Router, private route: ActivatedRoute) { }
@@ -58,6 +59,7 @@ export class NewTextPatternComponent {
     loadRefData() {
       this.accounts = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.account]);
       this.modes = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.mode]);
+      this.categories = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.category]);
     }
 
     addTextPattern() {

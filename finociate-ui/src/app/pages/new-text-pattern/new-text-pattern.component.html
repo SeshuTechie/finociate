@@ -71,6 +71,15 @@
                         </datalist>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="textPattern.otherValues.category" class="form-control"
+                            placeholder="Category" list="refDataCategories">
+                        <datalist id="refDataCategories">
+                            <option *ngFor="let item of categories" [value]="item">{{item}}</option>
+                        </datalist>
+                    </div>
+                </div>
             </div>
             <div class="form-group" *ngIf="isNewMode">
                 <button class="btn btn-success btn-lg btn-block" (click)="addTextPattern()">Add

@@ -4,6 +4,7 @@ import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.MongoCursor;
 import com.seshutechie.finociate.common.AppConstants;
 import com.seshutechie.finociate.common.util.DateUtil;
+import com.seshutechie.finociate.exception.InvalidDataException;
 import com.seshutechie.finociate.exception.TransactionNotFoundException;
 import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.repository.TransactionRepo;
@@ -41,7 +42,36 @@ public class TransactionService {
     }
 
     public Transaction saveTransaction(Transaction transaction) {
+        validateTransaction(transaction);
         return transactionRepo.save(transaction);
+    }
+
+    private void validateTransaction(Transaction transaction) {
+        if (transaction == null) {
+            logger.error("Transaction is null");
+            throw new InvalidDataException("Transaction is null");
+        }
+        if (transaction.getDate() == null) {
+            logger.error("Transaction Date is null", transaction.getAmount());
+            throw new InvalidDataException("Transaction Date is null");
+        }
+        try {
+            TransactionTypes.valueOf(transaction.getType());
+        } catch (Exception ex) {
+            throw new InvalidDataException("Invalid Transaction Type: " + transaction.getType());
+        }
+        if (transaction.getAmount() <= 0) {
+            logger.error("Invalid Amount: {}", transaction.getAmount());
+            throw new InvalidDataException("Invalid Amount:" + transaction.getAmount());
+        }
+        if (transaction.getAccount() == null || transaction.getAccount().trim().equals("")) {
+            logger.error("Transaction Account is null", transaction.getAmount());
+            throw new InvalidDataException("Transaction Account is required");
+        }
+        if (transaction.getCategory() == null || transaction.getCategory().trim().equals("")) {
+            logger.error("Transaction Category is null", transaction.getAmount());
+            throw new InvalidDataException("Transaction Category is required");
+        }
     }
 
     public Transaction updateTransaction(Transaction transaction) {

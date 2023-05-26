@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class TransactionTextService {
     private Transaction parse(String text, TransactionTextPattern textPattern) {
         Transaction transaction = null;
         if (text.contains(textPattern.getIdentifier())) {
+            text = text.replaceAll("\n", " ");
             logger.debug("Text identified with pattern: {}", textPattern);
             String patternText = getPatternText(textPattern);
             logger.debug("Pattern Text: {} ", patternText);
@@ -55,16 +57,23 @@ public class TransactionTextService {
                     transaction.setAmount(Double.parseDouble(valueText));
                 }
                 if (getParamIndex(paramIndex, TransactionTextParams._DATE_) > 0) {
-                    transaction.setDate(LocalDate.parse(matcher.group(getParamIndex(paramIndex, TransactionTextParams._DATE_)), DateTimeFormatter.ofPattern(textPattern.getDatePattern())));
+                    DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+                    builder.parseCaseInsensitive();
+                    builder.appendPattern(textPattern.getDatePattern());
+                    DateTimeFormatter dateFormat = builder.toFormatter();
+                    transaction.setDate(LocalDate.parse(matcher.group(getParamIndex(paramIndex, TransactionTextParams._DATE_)), dateFormat));
                 }
                 if (getParamIndex(paramIndex, TransactionTextParams._STORE_) > 0) {
                     transaction.setStore(matcher.group(getParamIndex(paramIndex, TransactionTextParams._STORE_)));
                 }
+            } else {
+                logger.debug("Pattern not matched: {}", textPattern.getName());
             }
             if (textPattern.getOtherValues() != null) {
                 transaction.setAccount(textPattern.getOtherValues().getAccount());
                 transaction.setType(textPattern.getOtherValues().getType());
                 transaction.setMode(textPattern.getOtherValues().getMode());
+                transaction.setCategory(textPattern.getOtherValues().getCategory());
             }
         }
         return transaction;
