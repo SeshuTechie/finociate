@@ -15,15 +15,15 @@
                         </a>
                     </div>
                 </div>
-<!--
+
                 <div class="col">
                     <div class="form-group">
-                        <a routerLink="/download-transactions" class="btn btn-primary btn-circle">
+                        <a (click)="downloadTransactions()" class="btn btn-primary btn-circle">
                             <i class="bi bi-arrow-down-square"></i>
                         </a>
                     </div>
                 </div>
--->
+
                 <div class="col">
                     <div class="form-group">
                         <input type="text" [(ngModel)]="filterParams.fromDate" class="form-control"

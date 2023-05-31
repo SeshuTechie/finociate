@@ -5,6 +5,11 @@ import com.seshutechie.finociate.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +38,16 @@ public class TransactionController {
         return transactionService.getTransactions(controllerUtil.getFilterOptions(fromDate, toDate));
     }
 
+    @GetMapping("/transactions/download")
+    public ResponseEntity<Resource> downloadTransactions(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
+        String filename = "Transactions_" + fromDate.orElse("") + "_" + toDate.orElse("_") + ".csv";
+        InputStreamResource file = new InputStreamResource(transactionService.downloadTransactions(controllerUtil.getFilterOptions(fromDate, toDate)));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
+    }
 
     @GetMapping("/transactions/summary")
     public TransactionSummary getTransactionsSummary(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {

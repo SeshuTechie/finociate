@@ -9,8 +9,7 @@ import { Transaction } from 'src/app/shared/model/transaction';
 import { TransactionList } from 'src/app/shared/model/transaction-list';
 import { DataTableDirective } from 'angular-datatables';
 import { Globals } from 'src/app/shared/global';
-
-// declare var $:any;
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-transactions',
@@ -95,5 +94,17 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return -1;
     }
     return 0;
+  }
+
+  downloadTransactions() {
+    console.log("Downloading Transactions...", this.filterParams);
+    return this.transactionService.downloadTransactions(this.filterParams)
+      .subscribe((response: any) => {
+        let blob: any = new Blob([response], { type: 'text/csv; charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+        //window.open(url);
+        saveAs(blob, 'transactions.csv');
+      }), (error: any) => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
   }
 }

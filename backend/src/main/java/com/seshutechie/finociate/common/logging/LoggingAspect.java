@@ -29,11 +29,18 @@ public class LoggingAspect {
     private ObjectMapper mapper;
 
     @Pointcut("within(com.seshutechie.finociate.controller.*)")
-    public void pointcut() {
-
+    public void pointcutInclude() {
     }
 
-    @Before("pointcut()")
+    @Pointcut("execution(* download*(..))")
+    public void pointcutExclude() {
+    }
+
+    @Pointcut("pointcutInclude() && !pointcutExclude()")
+    public void pointcutRequired() {
+    }
+
+    @Before("pointcutRequired()")
     public void logMethod(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Annotation[] declaredAnnotations = signature.getMethod().getDeclaredAnnotations();
@@ -62,7 +69,7 @@ public class LoggingAspect {
         return map;
     }
 
-    @AfterReturning(pointcut = "pointcut()", returning = "entity")
+    @AfterReturning(pointcut = "pointcutRequired()", returning = "entity")
     public void logMethodAfter(JoinPoint joinPoint, ResponseEntity<?> entity) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 //        RequestMapping mapping = signature.getMethod().getAnnotation(RequestMapping.class);

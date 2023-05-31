@@ -25,11 +25,22 @@ export class TransactionService {
     }),
   };
 
+  responseTypeOptions : Object = {
+    responseType: 'text/csv'
+  };
+
   // HttpClient API get() method => Fetch transactions list
   getTransactions(filterParams: FilterParams): Observable<TransactionList> {
     return this.http
       .get<TransactionList>(this.apiURL + '/transactions?' + ServiceHelper.getFilterString(filterParams))
       .pipe(retry(1), catchError(ServiceHelper.handleError));
+  }
+
+  downloadTransactions(filterParams: FilterParams): any {
+    let options =  {undefined, responseType: "csv"};
+    return this.http
+      .get<TransactionList>(this.apiURL + '/transactions/download?' + ServiceHelper.getFilterString(filterParams), 
+      this.responseTypeOptions);
   }
 
   // HttpClient API get() method => Fetch transactions summary

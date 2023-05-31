@@ -7,18 +7,20 @@ import com.seshutechie.finociate.common.util.DateUtil;
 import com.seshutechie.finociate.exception.InvalidDataException;
 import com.seshutechie.finociate.exception.TransactionNotFoundException;
 import com.seshutechie.finociate.model.*;
+import com.seshutechie.finociate.model.Collections;
 import com.seshutechie.finociate.repository.TransactionRepo;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingDouble;
@@ -26,6 +28,8 @@ import static java.util.stream.Collectors.summingDouble;
 @Service
 public class TransactionService {
     private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
+    private static final List<String> CSV_HEADER = Arrays.asList("date", "type", "description", "amount",
+            "account", "category", "subcategory", "store", "mode", "particulars", "notes");
 
     @Autowired
     private TransactionRepo transactionRepo;
@@ -52,7 +56,7 @@ public class TransactionService {
             throw new InvalidDataException("Transaction is null");
         }
         if (transaction.getDate() == null) {
-            logger.error("Transaction Date is null", transaction.getAmount());
+            logger.error("Transaction Date is null");
             throw new InvalidDataException("Transaction Date is null");
         }
         try {
@@ -65,11 +69,11 @@ public class TransactionService {
             throw new InvalidDataException("Invalid Amount:" + transaction.getAmount());
         }
         if (transaction.getAccount() == null || transaction.getAccount().trim().equals("")) {
-            logger.error("Transaction Account is null", transaction.getAmount());
+            logger.error("Transaction Account is null");
             throw new InvalidDataException("Transaction Account is required");
         }
         if (transaction.getCategory() == null || transaction.getCategory().trim().equals("")) {
-            logger.error("Transaction Category is null", transaction.getAmount());
+            logger.error("Transaction Category is null");
             throw new InvalidDataException("Transaction Category is required");
         }
     }
@@ -183,5 +187,45 @@ public class TransactionService {
             }
         }
         return list;
+    }
+
+    public InputStream downloadTransactions(FilterParameters filterOptions) {
+        TransactionList transactionList = getTransactions(filterOptions);
+        ByteArrayInputStream inputStream = null;
+        if (transactionList != null && transactionList.getTransactions() != null) {
+            inputStream = transactionsToStream(transactionList.getTransactions());
+        }
+        return inputStream;
+    }
+
+    private ByteArrayInputStream transactionsToStream(List<Transaction> transactions) {
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+            csvPrinter.printRecord(CSV_HEADER);
+            for (Transaction transaction : transactions) {
+                List<String> data = Arrays.asList(
+                        transaction.getDate().toString(),
+                        transaction.getType(),
+                        transaction.getDescription(),
+                        String.valueOf(transaction.getAmount()),
+                        transaction.getAccount(),
+                        transaction.getCategory(),
+                        transaction.getSubCategory(),
+                        transaction.getStore(),
+                        transaction.getMode(),
+                        transaction.getParticulars(),
+                        transaction.getNotes()
+                );
+                csvPrinter.printRecord(data);
+            }
+
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            logger.error("Failed to import data to CSV file: " + e.getMessage());
+        }
+        return null;
     }
 }
