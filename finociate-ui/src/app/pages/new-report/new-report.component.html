@@ -1,0 +1,214 @@
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="isNewMode">New Report Definition</h1>
+    <h1 class="h3 mb-2 text-gray-800" *ngIf="!isNewMode">Update Report Definition</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            Report Definition
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="reportDef.name" class="form-control" placeholder="Name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="reportDef.description" class="form-control"
+                            placeholder="Description">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <a (click)="addNewRow()" class="btn btn-primary">
+                            <i class="bi bi-plus-square"></i>New Row
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div *ngFor="let rowDef of reportDef.rowDefList;  let rowIndex = index">
+                    <div class="form-row">
+                        <div class="col">
+                            <span>Row Definition</span>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <a (click)="deleteRowDef(rowIndex)" class="btn btn-warning">
+                                    <i class="bi bi-trash"></i>Delete Row
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <a (click)="addNewItem(rowDef)" class="btn btn-primary">
+                                    <i class="bi bi-plus-square"></i>New Item
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="number" [(ngModel)]="rowDef.rowNum" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr style="color: #fff; background:#2874a6;">
+                                <th>Action</th>
+                                <th>Title</th>
+                                <th>Aggregation Type</th>
+                                <th>Value Type</th>
+                                <th>Display Type</th>
+                                <th>Group By</th>
+                                <th>Criteria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let itemDef of rowDef.itemDefList; let itemIndex = index">
+                                <td>
+                                    <div class="form-group">
+                                        <a (click)="deleteItemDef(rowDef, itemIndex)" class="btn btn-warning">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" [(ngModel)]="itemDef.title" class="form-control"
+                                        placeholder="Title">
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="itemDef.aggregationType"
+                                        id="aggregationType">
+                                        <option value="" disabled selected>Aggregation Type</option>
+                                        <option value="Overall">Overall</option>
+                                        <option value="Monthly">Monthly</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="itemDef.valueType" id="valueType">
+                                        <option value="" disabled selected>Value Type</option>
+                                        <option value="Simple">Simple</option>
+                                        <option value="CreditDebitSavings">CreditDebitSavings</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="itemDef.displayType" id="displayType">
+                                        <option value="" disabled selected>Display Type</option>
+                                        <option value="Chart-Pie">Chart-Pie</option>
+                                        <option value="Chart-Bar">Chart-Bar</option>
+                                        <option value="Table">Table</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a (click)="addGroupByField(itemDef)" class="btn btn-primary">
+                                        <i class="bi bi-plus-square"></i>
+                                    </a>
+                                    <table>
+                                        <tr *ngFor="let groupBy of itemDef.groupByFields; let groupByIndex = index">
+                                            <td>
+                                                <a (click)="deleteGroupByField(itemDef, groupByIndex)"
+                                                    class="btn btn-warning">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <select class="form-control"
+                                                    [(ngModel)]="itemDef.groupByFields[groupByIndex]">
+                                                    <option value="" disabled selected>Group By Field</option>
+                                                    <option value="type">type</option>
+                                                    <option value="account">account</option>
+                                                    <option value="category">category</option>
+                                                    <option value="subCategory">sub-category</option>
+                                                    <option value="store">store</option>
+                                                    <option value="mode">mode</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <a (click)="addCriteriaDef(itemDef)" class="btn btn-primary">
+                                        <i class="bi bi-plus-square"></i>
+                                    </a>
+                                    <table>
+                                        <tr *ngFor="let criteriaDef of itemDef.criteriaList; let criteriaIndex = index">
+                                            <td>
+                                                <a (click)="deleteCriteriaDef(itemDef, criteriaIndex)"
+                                                    class="btn btn-warning">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" [(ngModel)]="criteriaDef.field">
+                                                    <option value="" disabled selected>Field</option>
+                                                    <option value="type">type</option>
+                                                    <option value="account">account</option>
+                                                    <option value="amount">amount</option>
+                                                    <option value="category">category</option>
+                                                    <option value="subCategory">sub-category</option>
+                                                    <option value="store">store</option>
+                                                    <option value="mode">mode</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" [(ngModel)]="criteriaDef.condition">
+                                                    <option value="" disabled selected>Condition</option>
+                                                    <option value="eq">=</option>
+                                                    <option value="ne">!=</option>
+                                                    <option value="lt">&lt;</option>
+                                                    <option value="lte">&lt;=</option>
+                                                    <option value="gt">&gt;</option>
+                                                    <option value="gte">&gt;=</option>
+                                                    <option value="in">in</option>
+                                                    <option value="nin">not in</option>
+                                                    <option value="nul">null</option>
+                                                    <option value="nnul">not null</option>
+                                                    <option value="exists">exists</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" [(ngModel)]="criteriaDef.value" class="form-control"
+                                                    placeholder="Value">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <a (click)="addNewRow()" class="btn btn-primary">
+                            <i class="bi bi-plus-square"></i>New Row
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group" *ngIf="isNewMode">
+                        <button class="btn btn-success btn-lg btn-block" (click)="addReportDef()">Add
+                            Report Def</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" *ngIf="!isNewMode">
+                        <button class="btn btn-success btn-lg btn-block" (click)="editReportDef()">Update
+                            Report Def</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <a class="btn btn-warning btn-lg btn-block" routerLink="/reports">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

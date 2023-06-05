@@ -23,18 +23,34 @@ export class ReportsService {
     }),
   };
 
-  // HttpClient API get() method => Fetch transactions list
+  // HttpClient API get() method => Fetch reportDefs list
   getReportDefs(): Observable<ReportDefList> {
     return this.http
       .get<ReportDefList>(this.apiURL + '/report-def/all')
       .pipe(retry(1), catchError(ServiceHelper.handleError));
   }
 
-  updateReportDef(id: any, transaction: any): Observable<ReportDef> {
+  getReportDef(id: string): Observable<ReportDef> {
+    return this.http
+      .get<ReportDef>(this.apiURL + '/report-def/' + id)
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
+  }
+
+  addReportDef(reportDef: any): Observable<ReportDef> {
+    return this.http
+      .post<ReportDef>(
+        this.apiURL + '/report-def',
+        JSON.stringify(reportDef),
+        this.httpOptions
+      )
+      .pipe(retry(1), catchError(ServiceHelper.handleError));
+  }
+
+  updateReportDef(id: any, reportDef: any): Observable<ReportDef> {
     return this.http
       .put<ReportDef>(
         this.apiURL + '/report-def',
-        JSON.stringify(transaction),
+        JSON.stringify(reportDef),
         this.httpOptions
       )
       .pipe(retry(1), catchError(ServiceHelper.handleError));

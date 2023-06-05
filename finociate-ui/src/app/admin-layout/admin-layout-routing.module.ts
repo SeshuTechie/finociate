@@ -12,6 +12,7 @@ import { TransactionsComponent } from '../pages/transactions/transactions.compon
 import { UserComponent } from '../pages/user/user.component';
 import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.component';
 import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
+import { NewReportComponent } from '../pages/new-report/new-report.component';
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
@@ -29,6 +30,8 @@ const routes: Routes = [
   { path: 'text-patterns', component: TextPatternsComponent },
   { path: 'new-text-pattern', component: NewTextPatternComponent },
   { path: 'edit-text-pattern/:id', component: NewTextPatternComponent },
+  { path: 'new-report-def', component: NewReportComponent },
+  { path: 'edit-report-def/:id', component: NewReportComponent },
 ];
 
 @NgModule({

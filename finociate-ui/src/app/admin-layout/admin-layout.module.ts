@@ -21,6 +21,7 @@ import { ReportDataComponent } from '../pages/report-data/report-data.component'
 import { NgChartsModule } from 'ng2-charts';
 import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.component';
 import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
+import { NewReportComponent } from '../pages/new-report/new-report.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-patt
     ReportsComponent,
     ReportDataComponent,
     TextPatternsComponent,
-    NewTextPatternComponent
+    NewTextPatternComponent,
+    NewReportComponent
   ],
   imports: [
     CommonModule,
