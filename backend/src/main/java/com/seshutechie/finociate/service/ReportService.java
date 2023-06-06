@@ -261,7 +261,7 @@ public class ReportService {
             return null;
         }
         String[] keys = key.split(DELIM, -1);
-        return List.of(keys);
+        return List.of(Arrays.copyOfRange(keys, 0, keys.length - 1));
     }
 
     private String getGroupByKey(Transaction transaction, ReportItemDef itemDef) {
@@ -279,7 +279,6 @@ public class ReportService {
                 });
                 stringBuilder.append(DELIM);
             });
-
         }
         return stringBuilder.toString();
     }

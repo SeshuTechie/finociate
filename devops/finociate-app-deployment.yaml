@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: finociate-app
-          image: finociate:v0.4.0
+          image: finociate:v0.4.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

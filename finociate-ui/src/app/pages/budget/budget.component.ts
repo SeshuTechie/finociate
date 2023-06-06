@@ -10,6 +10,10 @@ import { BudgetItem } from 'src/app/shared/model/budget-item';
 
 dayjs.extend(customParseFormat);
 
+interface ParticularsSummaryMap {
+  [key: string]: number;
+}
+
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
@@ -30,6 +34,7 @@ export class BudgetComponent implements OnInit {
     transferIn: 0,
     transferOut: 0
   };
+  particularSummary: ParticularsSummaryMap = {};
   budgetMonth = '';
   showBudgetFrom = '';
   createBudgetFrom = '';
@@ -65,6 +70,7 @@ export class BudgetComponent implements OnInit {
         this.budget = data;
         this.sortData();
         this.computeTotalSummary();
+        this.computeParticularsSummary();
       } else {
         this.budget = {budgetItems: [], summaryItems: []};
         alert('No budget available for ' + this.showBudgetFrom);
@@ -147,6 +153,18 @@ export class BudgetComponent implements OnInit {
     });
   }
 
+  computeParticularsSummary() {
+    this.particularSummary = {};
+    this.budget.budgetItems.forEach(item => {
+      let value = 0;
+      if (this.particularSummary[item.particulars]) {
+        value = this.particularSummary[item.particulars];
+      }
+      value += item.amount;
+      this.particularSummary[item.particulars] = value;
+    });
+  }
+
   sortData() {
     this.budget.summaryItems.sort((a, b) => (a.account > b.account) ? 1 : 0)
     this.budget.budgetItems.sort(this.compareBudgetItems)
@@ -169,6 +187,10 @@ export class BudgetComponent implements OnInit {
       return -1;
     }
     return 0;
+  }
+
+  getKeys(object: any) {
+    return Object.keys(object);
   }
 }
 

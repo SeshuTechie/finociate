@@ -150,8 +150,8 @@ export class ReportDataComponent implements OnInit {
       } else {
         if (itemData.valueType == ValueTypes[ValueTypes.Simple]) {
           let amounts: number[] = [];
-            labels.push('Amount');
-            amounts.push(itemEntries[0].amount);
+          labels.push('Amount');
+          amounts.push(itemEntries[0].amount);
           datasets = [
             { data: amounts, label: 'Amount' }
           ];
@@ -159,10 +159,10 @@ export class ReportDataComponent implements OnInit {
           let credits: number[] = [];
           let debits: number[] = [];
           let savings: number[] = [];
-            labels.push('Amount');
-            credits.push(itemEntries[0].credit);
-            debits.push(itemEntries[0].debit);
-            savings.push(itemEntries[0].savings);
+          labels.push('Amount');
+          credits.push(itemEntries[0].credit);
+          debits.push(itemEntries[0].debit);
+          savings.push(itemEntries[0].savings);
           datasets = [
             { data: credits, label: 'Credit' },
             { data: debits, label: 'Debit' },
@@ -210,5 +210,26 @@ export class ReportDataComponent implements OnInit {
       datasets: datasets
     }
     return barChartData;
+  }
+
+  getSumOf(itemEntries: ReportItemEntry[], field: string): number {
+    let sum: number = 0;
+    itemEntries.forEach(item => {
+      switch (field) {
+        case 'amount':
+          sum += item.amount;
+          break;
+        case 'credit':
+          sum += item.credit;
+          break;
+        case 'debit':
+          sum += item.debit;
+          break;
+        case 'savings':
+          sum += item.savings;
+          break;
+      }
+    });
+    return sum;
   }
 }

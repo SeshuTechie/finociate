@@ -107,11 +107,13 @@ export class NewReportComponent implements OnInit {
     this.reportDef.rowDefList.sort((a, b) => (a.rowNum - b.rowNum));
     this.reportDef.rowDefList.forEach(rowDef => {
       rowDef.itemDefList.forEach(itemDef => {
-        itemDef.criteriaList.forEach(criteriaDef => {
-          if (criteriaDef.field == 'amount') {
-            criteriaDef.value = +criteriaDef.value;
-          }
-        })
+        if (itemDef.criteriaList) {
+          itemDef.criteriaList.forEach(criteriaDef => {
+            if (criteriaDef.field == 'amount') {
+              criteriaDef.value = +criteriaDef.value;
+            }
+          })
+        }
       })
     })
   }

@@ -4,6 +4,7 @@ import { SpendCategoryChartComponent } from '../spend-category-chart/spend-categ
 import { DashboardComponent } from './dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
 import { MonthlyViewChartComponent } from '../monthly-view-chart/monthly-view-chart.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -15,7 +16,8 @@ import { MonthlyViewChartComponent } from '../monthly-view-chart/monthly-view-ch
   ],
   imports: [
     CommonModule,
-    NgChartsModule
+    NgChartsModule,
+    SharedModule
   ],
   exports: [
     DashboardComponent

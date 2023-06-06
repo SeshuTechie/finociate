@@ -22,6 +22,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.component';
 import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
 import { NewReportComponent } from '../pages/new-report/new-report.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { NewReportComponent } from '../pages/new-report/new-report.component';
     ReportDataComponent,
     TextPatternsComponent,
     NewTextPatternComponent,
-    NewReportComponent
+    NewReportComponent,
   ],
   imports: [
     CommonModule,
@@ -49,7 +50,8 @@ import { NewReportComponent } from '../pages/new-report/new-report.component';
     DataTablesModule,
     FormsModule,
     DashboardModule,
-    NgChartsModule
+    NgChartsModule,
+    SharedModule
   ]
 })
 export class AdminLayoutModule { }

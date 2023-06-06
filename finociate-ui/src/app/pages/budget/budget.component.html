@@ -58,25 +58,43 @@
                     <tr *ngFor="let summaryItem of budget.summaryItems"
                         [ngStyle]="{'background-color': getSummaryItemColor(summaryItem.balance) }">
                         <td>{{ summaryItem.account }}</td>
-                        <td class="currency">{{ summaryItem.brought  | currency:currencyCode}}</td>
-                        <td class="currency">{{ summaryItem.inflow  | currency:currencyCode}}</td>
-                        <td class="currency">{{ summaryItem.outflow  | currency:currencyCode}}</td>
-                        <td class="currency">{{ summaryItem.transferIn  | currency:currencyCode}}</td>
-                        <td class="currency">{{ summaryItem.transferOut  | currency:currencyCode}}</td>
-                        <td class="currency">{{ summaryItem.balance  | currency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.brought  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.inflow  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.outflow  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.transferIn  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.transferOut  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ summaryItem.balance  | customCurrency:currencyCode}}</td>
                     </tr>
                     <tr *ngIf="totalSummary.balance != 0"  [ngStyle]="{'background-color': getSummaryItemColor(totalSummary.balance), 'font-weight': 'bold' }">
                         <td>{{ totalSummary.account }}</td>
-                        <td class="currency">{{ totalSummary.brought  | currency:currencyCode}}</td>
-                        <td class="currency">{{ totalSummary.inflow  | currency:currencyCode}}</td>
-                        <td class="currency">{{ totalSummary.outflow  | currency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.brought  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.inflow  | customCurrency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.outflow  | customCurrency:currencyCode}}</td>
                         <td class="currency"></td>
                         <td class="currency"></td>
-                        <td class="currency">{{ totalSummary.balance  | currency:currencyCode}}</td>
+                        <td class="currency">{{ totalSummary.balance  | customCurrency:currencyCode}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable1" width="100%"
+                cellspacing="0">
+                <thead>
+                    <tr style="color: #fff; background:#2874a6;">
+                        <th>Particulars</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let key of getKeys(particularSummary)">
+                        <td>{{ key }}</td>
+                        <td class="currency">{{ particularSummary[key]  | customCurrency: currencyCode}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 
@@ -119,7 +137,7 @@
                         [ngStyle]="{'background-color': getItemColor(budgetItem) }">
                         <td>{{ budgetItem.account }}</td>
                         <td>{{ budgetItem.type }}</td>
-                        <td class="currency">{{ budgetItem.amount  | currency:currencyCode}}</td>
+                        <td class="currency">{{ budgetItem.amount  | customCurrency: currencyCode}}</td>
                         <td>{{ budgetItem.description }}</td>
                         <td>{{ budgetItem.particulars }}</td>
                         <td>{{ budgetItem.category }}</td>

@@ -44,14 +44,25 @@
                                             <tr *ngFor="let itemEntry of itemData.itemEntries[key]">
                                                 <td *ngFor="let value of itemEntry.fieldValues"><span>{{value}}</span>
                                                 </td>
-                                                <td *ngIf="isSimpleItem(itemData)" class="text-end">{{itemEntry.amount |
-                                                    currency: currencyCode}}</td>
+                                                <td *ngIf="isSimpleItem(itemData)" class="text-end">{{itemEntry.amount | customCurrency: currencyCode}}</td>
                                                 <td *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end">
-                                                    {{itemEntry.credit | currency: currencyCode}}</td>
+                                                    {{itemEntry.credit | customCurrency: currencyCode}}</td>
                                                 <td *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end">
-                                                    {{itemEntry.debit | currency: currencyCode}}</td>
+                                                    {{itemEntry.debit | customCurrency: currencyCode}}</td>
                                                 <td *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end">
-                                                    {{itemEntry.savings | currency: currencyCode}}</td>
+                                                    {{itemEntry.savings | customCurrency: currencyCode}}</td>
+                                            </tr>
+                                            <tr *ngIf="itemData.groupByFields && itemData.groupByFields.length > 0">
+                                                <!-- <td><b>Total</b></td>-->
+                                                <th *ngFor="let field of itemData.groupByFields"><span>--Totals--</span> 
+                                                </th>
+                                                <th *ngIf="isSimpleItem(itemData)" class="text-end">{{ getSumOf(itemData.itemEntries[key], 'amount') | customCurrency: currencyCode}}</th>
+                                                <th *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end"><b>
+                                                    {{getSumOf(itemData.itemEntries[key], 'credit') | customCurrency: currencyCode}}</b></th>
+                                                <th *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end"><b>
+                                                    {{getSumOf(itemData.itemEntries[key], 'debit') | customCurrency: currencyCode}}</b></th>
+                                                <th *ngIf="isCreditDebitSavingsItem(itemData)" class="text-end"><b>
+                                                    {{getSumOf(itemData.itemEntries[key], 'savings') | customCurrency: currencyCode}}</b></th>
                                             </tr>
                                         </tbody>
                                     </table>
