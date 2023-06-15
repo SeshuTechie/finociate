@@ -62,7 +62,7 @@ public class DateUtil {
 
     public static SimpleDateFormat getDateFormat(String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(ZONE_UTC));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(ZONE_ID_SYSTEM));
         return dateFormat;
     }
 

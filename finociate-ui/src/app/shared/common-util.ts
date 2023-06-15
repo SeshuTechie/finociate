@@ -22,6 +22,13 @@ export class CommonUtil {
         return '';
     }
 
+    static getMonthStart(date: string): string {
+        if (date) {
+            return '1-' + date.substring(date.indexOf('-') + 1);
+        }
+        return '';
+    }
+
     static compareDates(d1: string, d2: string) {
         let parts = d1.split('-');
         let n1 = Number(parts[2] + parts[1] + parts[0]);

@@ -82,7 +82,10 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Budget Balance</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{budget.balance | customCurrency: currencyCode}}</div>
+                            <div *ngIf="budget.balance != 0" class="h5 mb-0 font-weight-bold text-gray-800">{{budget.balance | customCurrency: currencyCode}}</div>
+                            <div *ngIf="budget.balance == 0" class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a href="/budget">Define Budget</a>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="bi bi-currency-dollar text-gray-300 size-2x"></i>

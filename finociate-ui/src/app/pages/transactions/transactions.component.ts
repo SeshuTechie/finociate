@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DateRangeService } from 'src/app/services/date-range.service';
@@ -10,6 +10,15 @@ import { TransactionList } from 'src/app/shared/model/transaction-list';
 import { DataTableDirective } from 'angular-datatables';
 import { Globals } from 'src/app/shared/global';
 import { saveAs } from 'file-saver';
+import { RefDataService } from 'src/app/services/ref-data.service';
+import { RefDataTypes } from 'src/app/shared/model/ref-data-types';
+
+type RefData = {
+  accounts: string[],
+  categories: string[],
+  subcategories: string[],
+  stores: string[],
+}
 
 @Component({
   selector: 'app-transactions',
@@ -21,13 +30,38 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
   transactions!: Transaction[];
+  filteredTransactions!: Transaction[];
   filterParams: FilterParams = {
     fromDate: '',
     toDate: ''
   }
   currencyCode = Globals.CURRENCY_CODE;
 
-  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService, public router: Router) { }
+  @Input() filterTransaction: Transaction = {
+    id: '',
+    date: '',
+    description: '',
+    amount: 0,
+    category: '',
+    type: '',
+    account: '',
+    store: '',
+    subCategory: '',
+    mode: '',
+    particulars: '',
+    tags: [],
+    notes: ''
+  };
+
+  refData: RefData = {
+    accounts: [],
+    categories: [],
+    subcategories: [],
+    stores: []
+  };
+
+  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService,
+    private refDataService: RefDataService, public router: Router) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -37,7 +71,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
       this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
       this.loadTransactions(false);
-    })
+    });
+    this.loadRefData();
   }
 
   ngOnDestroy(): void {
@@ -50,7 +85,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.transactions = [];
     return this.transactionService.getTransactions(this.filterParams).subscribe((data: TransactionList) => {
       this.transactions = data.transactions;
-      this.transactions.sort(this.compareTransactions);
+      this.filteredTransactions = this.transactions;
+      this.filteredTransactions.sort(this.compareTransactions);
       console.log("Transactions count", this.transactions.length);
     });
   }
@@ -106,5 +142,67 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         saveAs(blob, 'transactions.csv');
       }), (error: any) => console.log('Error downloading the file'),
       () => console.info('File downloaded successfully');
+  }
+
+
+  loadRefData() {
+    this.refData.accounts = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.account]);
+    this.refData.categories = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.category]);
+    this.refData.subcategories = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.subcategory]);
+    this.transactionService.getDistinctValues('store').subscribe(data => {
+      this.refData.stores = data;
+      console.log("Stores", this.refData.stores);
+    });
+  }
+
+  filterTransactions() {
+    this.filteredTransactions = this.transactions;
+    if (this.filterTransaction.account != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.account == this.filterTransaction.account)
+    }
+    if (this.filterTransaction.type != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.type == this.filterTransaction.type)
+    }
+    if (this.filterTransaction.category != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.category == this.filterTransaction.category)
+    }
+    if (this.filterTransaction.subCategory != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.subCategory == this.filterTransaction.subCategory)
+    }
+    if (this.filterTransaction.description != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.description.toLowerCase().indexOf(this.filterTransaction.description.toLowerCase()) >= 0)
+    }
+    if (this.filterTransaction.store != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.store.toLowerCase().indexOf(this.filterTransaction.store.toLowerCase()) >= 0)
+    }
+    switch (this.filterTransaction.mode) {
+      case 'eq':
+        this.filteredTransactions = this.filteredTransactions.filter(t => t.amount == this.filterTransaction.amount);
+        break;
+      case 'ne':
+        this.filteredTransactions = this.filteredTransactions.filter(t => t.amount != this.filterTransaction.amount);
+        break;
+      case 'gt':
+        this.filteredTransactions = this.filteredTransactions.filter(t => t.amount > this.filterTransaction.amount);
+        break;
+      case 'lt':
+        this.filteredTransactions = this.filteredTransactions.filter(t => t.amount < this.filterTransaction.amount);
+        break;
+    }
+    this.filteredTransactions.sort(this.compareTransactions);
+    console.log("Filtered Transactions count", this.filteredTransactions.length);
+  }
+
+  resetTransactionFilters() {
+    this.filterTransaction.account = '';
+    this.filterTransaction.type = '';
+    this.filterTransaction.category = '';
+    this.filterTransaction.subCategory = '';
+    this.filterTransaction.description = '';
+    this.filterTransaction.store = '';
+    this.filterTransaction.mode = ''; // used for amount
+    this.filterTransaction.amount = 0;
+
+    this.filteredTransactions = this.transactions;
   }
 }

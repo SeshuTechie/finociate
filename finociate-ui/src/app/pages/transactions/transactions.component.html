@@ -7,54 +7,54 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <form #filterFrom="ngForm" (ngSubmit)="loadTransactions(true)">
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-group">
-                        <a routerLink="/new-transaction" class="btn btn-primary btn-circle">
-                            <i class="bi bi-plus-square"></i>
-                        </a>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <a routerLink="/new-transaction" class="btn btn-primary btn-circle">
+                                <i class="bi bi-plus-square"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <a (click)="downloadTransactions()" class="btn btn-primary btn-circle">
-                            <i class="bi bi-arrow-down-square"></i>
-                        </a>
+                    <div class="col">
+                        <div class="form-group">
+                            <a (click)="downloadTransactions()" class="btn btn-primary btn-circle">
+                                <i class="bi bi-arrow-down-square"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col">
-                    <div class="form-group">
-                        <input type="text" [(ngModel)]="filterParams.fromDate" class="form-control"
-                            placeholder="From Date dd-MM-yyyy" name="fromDate">
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="text" [(ngModel)]="filterParams.fromDate" class="form-control"
+                                placeholder="From Date dd-MM-yyyy" name="fromDate">
+                        </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <input type="text" [(ngModel)]="filterParams.toDate" class="form-control"
-                            placeholder="To Date dd-MM-yyyy" name="toDate">
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="text" [(ngModel)]="filterParams.toDate" class="form-control"
+                                placeholder="To Date dd-MM-yyyy" name="toDate">
+                        </div>
                     </div>
-                </div>
-                <div class="col">
-                    <a class="btn btn-primary btn-circle" (click)="loadTransactions(true)">
-                        <i class="bi bi-filter-square"></i>
-                    </a>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <a (click)="filterFrom.reset()" class="btn btn-danger btn-circle">
-                            <i class="bi bi-x-square"></i>
+                    <div class="col">
+                        <a class="btn btn-primary btn-circle" (click)="loadTransactions(true)">
+                            <i class="bi bi-filter-square"></i>
                         </a>
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <a (click)="filterFrom.reset()" class="btn btn-danger btn-circle">
+                                <i class="bi bi-x-square"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered" width="100%"
-                    cellspacing="0">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered"
+                    width="100%" cellspacing="0">
                     <thead>
                         <tr style="color: #fff; background:#2874a6;">
                             <th>Date</th>
@@ -69,8 +69,85 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let transaction of transactions" (click) = "editTransaction(transaction.id)"
-                        [ngStyle]="{'background-color': getTransactionColor(transaction) }">
+                        <tr style="color: #fff; background:#5f6061;">
+                            <td></td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" [(ngModel)]="filterTransaction.type" id="type">
+                                        <option value="" disabled selected>Select Type</option>
+                                        <option value="debit">Debit</option>
+                                        <option value="credit">Credit</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" [(ngModel)]="filterTransaction.description" class="form-control"
+                                    placeholder="Description">
+                            </td>
+                            <td>
+                                <select class="form-control" [(ngModel)]="filterTransaction.mode" id="mode">
+                                    <option value="" disabled selected>Operator</option>
+                                    <option value="eq">Equals</option>
+                                    <option value="ne">Not-Equals</option>
+                                    <option value="gt">Greater-Than</option>
+                                    <option value="lt">Less-Than</option>
+                                </select>
+                                <input type="number" [(ngModel)]="filterTransaction.amount" class="form-control"
+                                    placeholder="Amount">
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" [(ngModel)]="filterTransaction.account" class="form-control"
+                                        placeholder="Account" list="refDataAccounts">
+                                    <datalist id="refDataAccounts">
+                                        <option *ngFor="let item of refData.accounts" [value]="item">{{item}}
+                                        </option>
+                                    </datalist>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" [(ngModel)]="filterTransaction.store" class="form-control"
+                                        placeholder="Store/Place" list="refDataStores">
+                                    <datalist id="refDataStores">
+                                        <option *ngFor="let item of refData.stores" [value]="item">{{item}}</option>
+                                    </datalist>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" [(ngModel)]="filterTransaction.category" class="form-control"
+                                        placeholder="Category" list="refDataCategories">
+                                    <datalist id="refDataCategories">
+                                        <option *ngFor="let item of refData.categories" [value]="item">{{item}}
+                                        </option>
+                                    </datalist>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" [(ngModel)]="filterTransaction.subCategory" class="form-control"
+                                        placeholder="Sub-Category" list="refDataSubCategories">
+                                    <datalist id="refDataSubCategories">
+                                        <option *ngFor="let item of refData.subcategories" [value]="item">{{item}}
+                                        </option>
+                                    </datalist>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-circle" (click)="filterTransactions()">
+                                    <i class="bi bi-filter-square"></i>
+                                </a>
+                                <div class="form-group">
+                                    <a (click)="resetTransactionFilters()" class="btn btn-danger btn-circle">
+                                        <i class="bi bi-x-square"></i>
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr *ngFor="let transaction of filteredTransactions" (click)="editTransaction(transaction.id)"
+                            [ngStyle]="{'background-color': getTransactionColor(transaction) }">
                             <td>{{ transaction.date }}</td>
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.description }}</td>
@@ -80,7 +157,8 @@
                             <td>{{ transaction.category }}</td>
                             <td>{{ transaction.subCategory }}</td>
                             <td>
-                                <a (click)="deleteTransaction(transaction.id);$event.stopPropagation()" class="btn btn-danger btn-circle">
+                                <a (click)="deleteTransaction(transaction.id);$event.stopPropagation()"
+                                    class="btn btn-danger btn-circle">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>

@@ -66,8 +66,14 @@ export class ReportDataComponent implements OnInit {
     });
   }
 
-  getKeys(object: any) {
-    return Object.keys(object);
+  getKeys(itemData: any) {
+    let keys = Object.keys(itemData.itemEntries);
+    if (itemData.aggregationType == AggregationTypes[AggregationTypes.Monthly]) {
+      this.sortMonthKeys(keys);
+    } else {
+      keys.sort();
+    }
+    return keys;
   }
 
   isSimpleItem(itemData: ReportItemData) {
@@ -175,8 +181,11 @@ export class ReportDataComponent implements OnInit {
       if (!itemData.groupByFields || itemData.groupByFields.length == 0) {
         if (itemData.valueType == ValueTypes[ValueTypes.Simple]) {
           let amounts: number[] = [];
-          Object.entries(itemData.itemEntries).forEach(([key, entries]) => {
+          let keys = Object.keys(itemData.itemEntries);
+          keys = this.sortMonthKeys(keys);
+          keys.forEach(key => {
             labels.push(key);
+            let entries = itemData.itemEntries[key];
             if (entries.length > 0) {
               amounts.push(entries[0].amount);
             }
@@ -188,8 +197,11 @@ export class ReportDataComponent implements OnInit {
           let credits: number[] = [];
           let debits: number[] = [];
           let savings: number[] = [];
-          Object.entries(itemData.itemEntries).forEach(([key, entries]) => {
+          let keys = Object.keys(itemData.itemEntries);
+          keys = this.sortMonthKeys(keys);
+          keys.forEach(key => {
             labels.push(key);
+            let entries = itemData.itemEntries[key];
             if (entries.length > 0) {
               credits.push(entries[0].credit);
               debits.push(entries[0].debit);
@@ -231,5 +243,24 @@ export class ReportDataComponent implements OnInit {
       }
     });
     return sum;
+  }
+
+  sortMonthKeys(keys: string[]) {
+    return keys.sort((a, b) => {
+      let aMonth: number = +a.substring(0, a.indexOf("-"));
+      let aYear: number = +a.substring(a.indexOf("-") + 1);
+
+      let bMonth: number = +b.substring(0, b.indexOf("-"));
+      let bYear: number = +b.substring(b.indexOf("-") + 1);
+      let value: number = 0;
+      if (aYear < bYear) {
+        value = -1;
+      } else if (aYear > bYear) {
+        value = 1;
+      } else {
+        value = aMonth - bMonth;
+      }
+      return value;
+    });
   }
 }

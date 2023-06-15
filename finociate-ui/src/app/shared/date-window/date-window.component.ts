@@ -15,8 +15,9 @@ export class DateWindowComponent implements OnInit {
     'Last FY': [CommonUtil.getFYStart(-1)?.startOf('month'), CommonUtil.getFYStart(0)?.startOf('month').subtract(1, 'day')],
     'This Year': [dayjs().startOf('year'), dayjs()],
     'Last Year': [dayjs().subtract(1, 'year').startOf('year'), dayjs().subtract(1, 'year').endOf('year')],
+    'This Month': [dayjs().startOf('month'), dayjs().endOf('month')],
+    'Last Month': [dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month')],
     'Last 30 Days': [dayjs().subtract(29, 'days'), dayjs()],
-    'Last Month': [dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month')]
   }
   constructor(private dateRangeService: DateRangeService) { }
 

@@ -5,6 +5,8 @@ import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { TransactionSummary } from 'src/app/shared/model/transaction-summary';
 import { Globals } from 'src/app/shared/global';
+import { BudgetService } from 'src/app/services/budget.service';
+import { Budget } from 'src/app/shared/model/budget';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +22,7 @@ export class DashboardComponent implements OnInit {
     savingsPercent: 0
   };
   budget = {
-    balance: 178000
+    balance: 0
   };
   filterParams: FilterParams = {
     fromDate: '',
@@ -29,7 +31,7 @@ export class DashboardComponent implements OnInit {
   currencySymbl = Globals.CURRENCY_SYMBOL;
   currencyCode = Globals.CURRENCY_CODE;
 
-  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService) { }
+  constructor(public transactionService: TransactionService, private dateRangeService: DateRangeService, private budgetService: BudgetService,) { }
 
   ngOnInit(): void {
     this.dateRangeService.dateRange().subscribe(value => {
@@ -38,6 +40,7 @@ export class DashboardComponent implements OnInit {
       this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
       console.log('Dashboard filterParams', this.filterParams);
       this.getSummary();
+      this.loadBudget();
     })
   }
 
@@ -49,5 +52,23 @@ export class DashboardComponent implements OnInit {
       this.summary = data;
       console.log("Transactions", data);
     });
+  }
+
+  loadBudget() {
+    let date = CommonUtil.getMonthStart(this.filterParams.toDate);
+    console.debug('Budget Date', date);
+    this.budgetService.getBudget(date).subscribe((data: Budget) => {
+      if (data) {
+        this.budget.balance = this.getBudgetBalance(data);
+      } else {
+        this.budget.balance = 0;
+      }
+    });
+  }
+
+  getBudgetBalance(budget: Budget): number {
+    let balance: number = 0;
+    budget.summaryItems.forEach(item => balance += item.balance);
+    return balance;
   }
 }
