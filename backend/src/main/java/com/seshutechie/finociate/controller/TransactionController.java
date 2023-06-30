@@ -81,7 +81,7 @@ public class TransactionController {
     }
 
     @GetMapping("/distinct-values/{field}")
-    public List<String> getTransactionsSummary(@PathVariable String field) {
-        return transactionService.getDistinctValues(field);
+    public List<String> getTransactionsSummary(@PathVariable String field, @RequestParam Optional<String> matchValue) {
+        return transactionService.getDistinctValues(field, matchValue.orElse(null));
     }
 }

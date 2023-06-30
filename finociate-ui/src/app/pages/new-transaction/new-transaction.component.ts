@@ -38,6 +38,7 @@ export class NewTransactionComponent implements OnInit {
   subcategories!: string[];
   modes!: string[];
   stores!: string[];
+  descriptions!: string[];
 
   constructor(private transactionService: TransactionService, private refDataService: RefDataService,
     private router: Router, private route: ActivatedRoute) { }
@@ -79,9 +80,18 @@ export class NewTransactionComponent implements OnInit {
     this.categories = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.category]);
     this.subcategories = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.subcategory]);
     this.modes = this.refDataService.getDataItems(RefDataTypes[RefDataTypes.mode]);
-    this.transactionService.getDistinctValues('store').subscribe(data => {
+    this.transactionService.getDistinctValues(RefDataTypes[RefDataTypes.mode]).subscribe(data => {
       this.stores = data;
       console.log("Stores", this.stores);
     });
+  }
+
+  descriptionChanged() {
+    if (this.transaction.description && this.transaction.description.length >= 3) {
+      this.transactionService.getDistinctValues(RefDataTypes[RefDataTypes.description]).subscribe(data => {
+        this.descriptions = data;
+        console.log("Descriptions", this.descriptions);
+      });
+    }
   }
 }

@@ -4,4 +4,5 @@ export enum RefDataTypes {
     subcategory,
     mode,
     store,
+    description,
 }

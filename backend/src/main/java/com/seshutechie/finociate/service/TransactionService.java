@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -176,9 +178,19 @@ public class TransactionService {
         return transactionSummaryList;
     }
 
-    public List<String> getDistinctValues(String field) {
-        DistinctIterable<String> iterable = mongoTemplate.getCollection(Collections.Transactions)
-                .distinct(field, String.class);
+    public List<String> getDistinctValues(String field, String value) {
+        DistinctIterable<String> iterable = null;
+        if (value != null) {
+            Criteria criteria = new Criteria();
+            criteria.where(field).regex("/.*" + value + ".*/i");
+            Query query = new Query();
+            query.addCriteria(criteria);
+            iterable = mongoTemplate.getCollection(Collections.Transactions)
+                    .distinct(field, query.getQueryObject(), String.class);
+        } else {
+            iterable = mongoTemplate.getCollection(Collections.Transactions)
+                    .distinct(field, String.class);
+        }
         List<String> list;
         try (MongoCursor<String> cursor = iterable.iterator()) {
             list = new ArrayList<>();

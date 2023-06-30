@@ -30,7 +30,10 @@
                 <div class="col">
                     <div class="form-group">
                         <input type="text" [(ngModel)]="transaction.description" class="form-control"
-                            placeholder="Description">
+                            placeholder="Description" list="refDescriptions" (input)="descriptionChanged()">
+                        <datalist id="refDescriptions">
+                            <option *ngFor="let item of descriptions" [value]="item">{{item}}</option>
+                        </datalist>                            
                     </div>
                 </div>
                 <div class="col">

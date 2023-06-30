@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { BudgetService } from 'src/app/services/budget.service';
 import { Budget } from 'src/app/shared/model/budget';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -73,11 +73,25 @@ export class BudgetComponent implements OnInit {
         this.computeParticularsSummary();
       } else {
         this.budget = {budgetItems: [], summaryItems: []};
+        this.initializeSummary();
+        this.particularSummary = {};
         alert('No budget available for ' + this.showBudgetFrom);
       }
       this.budgetMonth = this.showBudgetFrom;
       console.log("Budget", data);
     });
+  }
+
+  initializeSummary() {
+    this.totalSummary = {
+      account: 'Total',
+      balance: 0,
+      brought: 0,
+      inflow: 0,
+      outflow: 0,
+      transferIn: 0,
+      transferOut: 0,
+    };
   }
 
   createBudget() {
@@ -136,15 +150,7 @@ export class BudgetComponent implements OnInit {
   }
 
   computeTotalSummary() {
-    this.totalSummary = {
-      account: 'Total',
-      balance: 0,
-      brought: 0,
-      inflow: 0,
-      outflow: 0,
-      transferIn: 0,
-      transferOut: 0,
-    };
+    this.initializeSummary();
     this.budget.summaryItems.forEach(item => {
       this.totalSummary.balance += item.balance;
       this.totalSummary.brought += item.brought;
