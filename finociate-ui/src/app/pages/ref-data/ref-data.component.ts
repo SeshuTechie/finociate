@@ -9,7 +9,6 @@ import { RefDataList } from 'src/app/shared/model/ref-data-list';
   styleUrls: ['./ref-data.component.css']
 })
 export class RefDataComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
   refDatas!: RefData[];
   filterParams: any = {
     key: '',
@@ -18,9 +17,6 @@ export class RefDataComponent implements OnInit {
   constructor(public refDataService: RefDataService) { }
   
   ngOnInit(): void {
-    this.dtOptions = {
-      paging: false
-    };
     this.loadRefData();
   }
 

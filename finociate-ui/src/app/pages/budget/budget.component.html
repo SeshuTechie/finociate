@@ -40,11 +40,10 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable1" width="100%"
-                cellspacing="0">
+        <div class="table-responsive" style="padding-bottom: 10px">
+            <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
-                    <tr style="color: #fff; background:#2874a6;">
+                    <tr  class="table-dark">
                         <th>Account</th>
                         <th>Brought</th>
                         <th>Inflow</th>
@@ -56,7 +55,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let summaryItem of budget.summaryItems"
-                        [ngStyle]="{'background-color': getSummaryItemColor(summaryItem.balance) }">
+                        [ngClass]="{
+                            'table-success': summaryItem.balance > 0, 
+                            'table-danger': summaryItem.balance < 0}">
                         <td>{{ summaryItem.account }}</td>
                         <td class="currency">{{ summaryItem.brought  | customCurrency:currencyCode}}</td>
                         <td class="currency">{{ summaryItem.inflow  | customCurrency:currencyCode}}</td>
@@ -65,7 +66,10 @@
                         <td class="currency">{{ summaryItem.transferOut  | customCurrency:currencyCode}}</td>
                         <td class="currency">{{ summaryItem.balance  | customCurrency:currencyCode}}</td>
                     </tr>
-                    <tr *ngIf="totalSummary.balance != 0"  [ngStyle]="{'background-color': getSummaryItemColor(totalSummary.balance), 'font-weight': 'bold' }">
+                    <tr *ngIf="totalSummary.balance != 0" style="font-weight: bold"
+                        [ngClass]="{
+                            'table-success': totalSummary.balance > 0, 
+                            'table-danger': totalSummary.balance < 0}">
                         <td>{{ totalSummary.account }}</td>
                         <td class="currency">{{ totalSummary.brought  | customCurrency:currencyCode}}</td>
                         <td class="currency">{{ totalSummary.inflow  | customCurrency:currencyCode}}</td>
@@ -77,11 +81,11 @@
                 </tbody>
             </table>
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable1" width="100%"
-                cellspacing="0">
+
+        <div class="table-responsive" >
+            <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
-                    <tr style="color: #fff; background:#2874a6;">
+                    <tr class="table-dark">
                         <th>Particulars</th>
                         <th>Total Amount</th>
                     </tr>
@@ -94,7 +98,6 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>
 
@@ -119,10 +122,9 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table datatable [dtOptions]="dtOptions" class="table table-bordered" id="dataTable2" width="100%"
-                cellspacing="0">
+            <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
-                    <tr style="color: #fff; background:#2874a6;">
+                    <tr class="table-dark">
                         <th>Account</th>
                         <th>Type</th>
                         <th>Amount</th>
@@ -134,7 +136,13 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let budgetItem of budget.budgetItems" (click)="editBudgetItem(budgetItem.id)"
-                        [ngStyle]="{'background-color': getItemColor(budgetItem) }">
+                    [ngClass]="{
+                        'table-success': budgetItem.type == 'credit',
+                        'table-secondary': budgetItem.type == 'brought',
+                        'table-info': budgetItem.type == 'transferTo',
+                        'table-primary': budgetItem.type == 'debit' && budgetItem.category == 'savings',
+                        'table-warning': budgetItem.type == 'debit' && budgetItem.category != 'savings',
+                    }">
                         <td>{{ budgetItem.account }}</td>
                         <td>{{ budgetItem.type }}</td>
                         <td class="currency">{{ budgetItem.amount  | customCurrency: currencyCode}}</td>

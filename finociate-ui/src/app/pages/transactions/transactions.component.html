@@ -6,57 +6,24 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <form #filterFrom="ngForm" (ngSubmit)="loadTransactions(true)">
-                <div class="form-row">
-                    <div class="col">
-                        <div class="form-group">
-                            <a routerLink="/new-transaction" class="btn btn-primary btn-circle">
-                                <i class="bi bi-plus-square"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="form-group">
-                            <a (click)="downloadTransactions()" class="btn btn-primary btn-circle">
-                                <i class="bi bi-arrow-down-square"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="form-group">
-                            <input type="text" [(ngModel)]="filterParams.fromDate" class="form-control"
-                                placeholder="From Date dd-MM-yyyy" name="fromDate">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <input type="text" [(ngModel)]="filterParams.toDate" class="form-control"
-                                placeholder="To Date dd-MM-yyyy" name="toDate">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <a class="btn btn-primary btn-circle" (click)="loadTransactions(true)">
-                            <i class="bi bi-filter-square"></i>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <a (click)="filterFrom.reset()" class="btn btn-danger btn-circle">
-                                <i class="bi bi-x-square"></i>
-                            </a>
-                        </div>
-                    </div>
+            <div class="form-row">
+                <div class="form-group" style="padding-right: 10px">
+                    <a routerLink="/new-transaction" class="btn btn-primary btn-circle">
+                        <i class="bi bi-plus-square"></i>
+                    </a>
                 </div>
-            </form>
+                <div class="form-group">
+                    <a (click)="downloadTransactions()" class="btn btn-primary btn-circle">
+                        <i class="bi bi-arrow-down-square"></i>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered"
-                    width="100%" cellspacing="0">
+                <table width="100%" cellspacing="0" class="table table-bordered">
                     <thead>
-                        <tr style="color: #fff; background:#2874a6;">
+                        <tr class="table-dark">
                             <th>Date</th>
                             <th>Type</th>
                             <th>Description</th>
@@ -67,10 +34,19 @@
                             <th>Sub-Category</th>
                             <th>Action</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="color: #fff; background:#5f6061;">
-                            <td></td>
+                        <tr class="table-secondary">
+                            <td>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <input type="text" [(ngModel)]="dateFilters.fromDate" class="form-control"
+                                            placeholder="From: dd-MM-yyyy" name="fromDate">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" [(ngModel)]="dateFilters.toDate" class="form-control"
+                                            placeholder="To: dd-MM-yyyy" name="toDate">
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 <div class="form-group">
                                     <select class="form-control" [(ngModel)]="filterTransaction.type" id="type">
@@ -146,8 +122,15 @@
                             </td>
 
                         </tr>
+                    </thead>
+                    <tbody>
                         <tr *ngFor="let transaction of filteredTransactions" (click)="editTransaction(transaction.id)"
-                            [ngStyle]="{'background-color': getTransactionColor(transaction) }">
+                            [ngClass]="{
+                                'table-success': transaction.type == 'credit' && transaction.category == 'Salary', 
+                                'table-info': transaction.type == 'credit' && transaction.category != 'Salary', 
+                                'table-primary': transaction.type == 'debit' && transaction.category == 'Savings',
+                                'table-warning': transaction.type == 'debit' && transaction.category != 'Savings',
+                            }">
                             <td>{{ transaction.date }}</td>
                             <td>{{ transaction.type }}</td>
                             <td>{{ transaction.description }}</td>

@@ -30,10 +30,13 @@ export class CommonUtil {
     }
 
     static compareDates(d1: string, d2: string) {
-        let parts = d1.split('-');
-        let n1 = Number(parts[2] + parts[1] + parts[0]);
-        parts = d2.split('-');
-        let n2 = Number(parts[2] + parts[1] + parts[0]);
+        let n1 = this.getDateNumber(d1);
+        let n2 = this.getDateNumber(d2);
         return n1 - n2;
+    }
+
+    static getDateNumber(date: string) {
+        let parts = date.split('-');
+        return Number(parts[2] + (parts[1].length < 2 ? '0' : '') + parts[1] + (parts[0].length < 2 ? '0' : '') + parts[0]);
     }
 }

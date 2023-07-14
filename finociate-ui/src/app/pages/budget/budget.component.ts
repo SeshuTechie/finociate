@@ -20,7 +20,6 @@ interface ParticularsSummaryMap {
   styleUrls: ['./budget.component.css']
 })
 export class BudgetComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
   budget: Budget = {
     budgetItems: [],
     summaryItems: []
@@ -43,10 +42,6 @@ export class BudgetComponent implements OnInit {
   constructor(public budgetService: BudgetService, public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      paging: false
-    };
-
     let fromMonth = this.route.snapshot.queryParams['budgetMonth'];
     
     if (fromMonth) {
@@ -126,29 +121,6 @@ export class BudgetComponent implements OnInit {
     this.router.navigate([uri]);
   }
 
-  getItemColor(item: BudgetItem) {
-    let color = 'white';
-    switch(item.type) {
-      case 'credit':
-        color = '#e8f8f5';
-        break;
-      case 'debit':
-        color = item.category == 'savings' ? '#f4ecf7' : '#fdedec';
-        break;
-      case 'brought':
-        color = '#ebf5fb';
-        break;
-      case 'transferTo':
-        color = '#f4f6f6';
-        break;
-    }
-    return color;
-  }
-
-  getSummaryItemColor(balance: number) {
-    return balance > 0 ? '#e8f8f5' : '#fdedec';
-  }
-
   computeTotalSummary() {
     this.initializeSummary();
     this.budget.summaryItems.forEach(item => {
@@ -199,4 +171,3 @@ export class BudgetComponent implements OnInit {
     return Object.keys(object);
   }
 }
-

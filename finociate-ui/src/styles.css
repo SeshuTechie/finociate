@@ -60,3 +60,7 @@
 .currency {
   text-align: right;
 }
+
+.table-dark {
+  --bs-table-bg: Navy;
+}

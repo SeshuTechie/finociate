@@ -29,9 +29,9 @@
                             <div *ngSwitchDefault>
                                 <div *ngFor="let key of getKeys(itemData)">
                                     <span>Values for: {{key}}</span>
-                                    <table class="table table-striped">
+                                    <table class="table table-bordered table-striped">
                                         <thead>
-                                            <tr>
+                                            <tr class="table-dark">
                                                 <th *ngFor="let field of itemData.groupByFields" scope="col">{{field}}
                                                 </th>
                                                 <th *ngIf="isSimpleItem(itemData)">Amount</th>

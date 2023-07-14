@@ -10,14 +10,10 @@ import { TextPattern } from 'src/app/shared/model/text-pattern';
 })
 export class TextPatternsComponent implements OnInit {
   textPatterns!: TextPattern[];
-  dtOptions: DataTables.Settings = {};
 
   constructor(public textPatternService: TextPatternsService, public router: Router) {}
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
     this.loadTextPatterns();
   }
 

@@ -10,16 +10,11 @@ import { ReportDefList } from 'src/app/shared/model/report-def-list';
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
-
-  reportDefs!: ReportDef[];
+   reportDefs!: ReportDef[];
 
   constructor(private reportsService: ReportsService, public router: Router) { }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
     this.loadReportDefs();
   }
 

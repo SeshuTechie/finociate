@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { DateRangeService } from 'src/app/services/date-range.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { CommonUtil } from 'src/app/shared/common-util';
 import { FilterParams } from 'src/app/shared/model/filter-params';
 import { Transaction } from 'src/app/shared/model/transaction';
 import { TransactionList } from 'src/app/shared/model/transaction-list';
-import { DataTableDirective } from 'angular-datatables';
 import { Globals } from 'src/app/shared/global';
 import { saveAs } from 'file-saver';
 import { RefDataService } from 'src/app/services/ref-data.service';
@@ -25,13 +23,14 @@ type RefData = {
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css']
 })
-export class TransactionsComponent implements OnInit, OnDestroy {
-  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+export class TransactionsComponent implements OnInit {
   transactions!: Transaction[];
   filteredTransactions!: Transaction[];
   filterParams: FilterParams = {
+    fromDate: '',
+    toDate: ''
+  }
+  dateFilters: FilterParams = {
     fromDate: '',
     toDate: ''
   }
@@ -64,19 +63,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     private refDataService: RefDataService, public router: Router) { }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
     this.dateRangeService.dateRange().subscribe(value => {
       this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
       this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
       this.loadTransactions(false);
     });
     this.loadRefData();
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
   }
 
   // Get transactions list
@@ -102,10 +94,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   editTransaction(id: any) {
     this.router.navigate(['/edit-transaction/' + id]);
-  }
-
-  getTransactionColor(transaction: Transaction) {
-    return transaction.type == 'credit' ? '#e8f8f5' : transaction.category == 'Savings' ? '#f4ecf7' : '#fdedec';
   }
 
   compareTransactions(a: Transaction, b: Transaction) {
@@ -157,6 +145,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   filterTransactions() {
     this.filteredTransactions = this.transactions;
+    if (this.dateFilters.fromDate != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => CommonUtil.compareDates(this.dateFilters.fromDate, t.date) <= 0);
+    }
+    if (this.dateFilters.toDate != '') {
+      this.filteredTransactions = this.filteredTransactions.filter(t => CommonUtil.compareDates(this.dateFilters.toDate, t.date) >= 0);
+    }
     if (this.filterTransaction.account != '') {
       this.filteredTransactions = this.filteredTransactions.filter(t => t.account == this.filterTransaction.account)
     }
@@ -194,6 +188,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   resetTransactionFilters() {
+    this.dateFilters.fromDate = '';
+    this.dateFilters.toDate = '';
     this.filterTransaction.account = '';
     this.filterTransaction.type = '';
     this.filterTransaction.category = '';

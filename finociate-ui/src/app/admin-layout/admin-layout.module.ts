@@ -9,7 +9,6 @@ import { UserComponent } from '../pages/user/user.component';
 import { SidebarModule } from '../sidebar/sidebar.module';
 import { NavbarModule } from '../shared/navbar/navbar.module';
 import { FooterModule } from '../shared/footer/footer.module';
-import { DataTablesModule } from 'angular-datatables';
 import { NewTransactionComponent } from '../pages/new-transaction/new-transaction.component';
 import { DashboardModule } from '../pages/dashboard/dashboard.module';
 import { RefDataComponent } from '../pages/ref-data/ref-data.component';
@@ -47,7 +46,6 @@ import { SharedModule } from '../shared/shared.module';
     SidebarModule,
     NavbarModule,
     FooterModule,
-    DataTablesModule,
     FormsModule,
     DashboardModule,
     NgChartsModule,
