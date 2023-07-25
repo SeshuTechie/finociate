@@ -106,9 +106,7 @@ public class TransactionService {
             if (filters.getFromDate() != null && filters.getToDate() != null) {
                 logger.debug("Getting all transactions between dates: {} {}", filters.getFromDate(), filters.getToDate());
                 transactionList.setTransactions(
-                        transactionRepo.findAllByDateBetween(
-                                DateUtil.getDateFrom(filters.getFromDate(), -1), // make from date inclusive
-                                DateUtil.getDateFrom(filters.getToDate(), +1))); // make to date inclusive
+                        transactionRepo.findAllByDateBetween(filters.getFromDate(), filters.getToDate()));
             } else {
                 logger.debug("No filter matches, getting all transactions");
                 transactionList.setTransactions(transactionRepo.findAll());
