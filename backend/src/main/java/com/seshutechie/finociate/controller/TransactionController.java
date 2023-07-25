@@ -1,5 +1,6 @@
 package com.seshutechie.finociate.controller;
 
+import com.seshutechie.finociate.common.util.CommonUtil;
 import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.service.TransactionService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @Autowired
-    private ControllerUtil controllerUtil;
+    private CommonUtil commonUtil;
 
 
     @GetMapping("/transaction/{id}")
@@ -35,13 +36,13 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public TransactionList getTransactions(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        return transactionService.getTransactions(controllerUtil.getFilterOptions(fromDate, toDate));
+        return transactionService.getTransactions(commonUtil.getFilterOptions(fromDate, toDate));
     }
 
     @GetMapping("/transactions/download")
     public ResponseEntity<Resource> downloadTransactions(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        String filename = "Transactions_" + fromDate.orElse("") + "_" + toDate.orElse("_") + ".csv";
-        InputStreamResource file = new InputStreamResource(transactionService.downloadTransactions(controllerUtil.getFilterOptions(fromDate, toDate)));
+        String filename = "Transactions_" + fromDate.orElse("") + "_" + toDate.orElse("") + ".csv";
+        InputStreamResource file = new InputStreamResource(transactionService.downloadTransactions(commonUtil.getFilterOptions(fromDate, toDate)));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
@@ -51,17 +52,17 @@ public class TransactionController {
 
     @GetMapping("/transactions/summary")
     public TransactionSummary getTransactionsSummary(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        return transactionService.getTransactionsSummary(controllerUtil.getFilterOptions(fromDate, toDate));
+        return transactionService.getTransactionsSummary(commonUtil.getFilterOptions(fromDate, toDate));
     }
 
     @GetMapping("/summary/categories")
     public AmountsData getCategoryAmountData(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        return transactionService.getCategoryAmountsData(controllerUtil.getFilterOptions(fromDate, toDate));
+        return transactionService.getCategoryAmountsData(commonUtil.getFilterOptions(fromDate, toDate));
     }
 
     @GetMapping("/summary/monthly")
     public TransactionSummaryList getMonthlySummary(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        return transactionService.getMonthlySummary(controllerUtil.getFilterOptions(fromDate, toDate));
+        return transactionService.getMonthlySummary(commonUtil.getFilterOptions(fromDate, toDate));
     }
 
 

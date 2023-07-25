@@ -1,7 +1,6 @@
-package com.seshutechie.finociate.controller;
+package com.seshutechie.finociate.common.util;
 
 import com.seshutechie.finociate.common.AppConfig;
-import com.seshutechie.finociate.common.util.DateUtil;
 import com.seshutechie.finociate.model.FilterParameters;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -15,9 +14,9 @@ import java.util.Date;
 import java.util.Optional;
 
 @Component
-public class ControllerUtil {
+public class CommonUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(ControllerUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
     @Autowired
     private AppConfig appConfig;
@@ -43,5 +42,9 @@ public class ControllerUtil {
             }
         }
         return null;
+    }
+
+    public String getDateString(Date date) {
+        return dateFormat.format(date);
     }
 }

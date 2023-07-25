@@ -127,7 +127,7 @@ export class TransactionsComponent implements OnInit {
         let blob: any = new Blob([response], { type: 'text/csv; charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         //window.open(url);
-        saveAs(blob, 'transactions.csv');
+        saveAs(blob, 'Transactions_' + CommonUtil.getCurrentDateTimeString() + '.csv');
       }), (error: any) => console.log('Error downloading the file'),
       () => console.info('File downloaded successfully');
   }

@@ -1,20 +1,29 @@
 package com.seshutechie.finociate.service;
 
+import com.seshutechie.finociate.common.util.CommonUtil;
 import com.seshutechie.finociate.exception.BudgetItemNotFoundException;
 import com.seshutechie.finociate.exception.InvalidDataException;
 import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.repository.BudgetItemRepo;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.*;
 
 @Service
 public class BudgetService {
     private static final Logger logger = LoggerFactory.getLogger(BudgetService.class);
+    private static final List<String> CSV_HEADER = Arrays.asList("date", "account", "type", "amount", "description",
+            "particulars", "category");
 
+    @Autowired
+    private CommonUtil commonUtil;
     @Autowired
     private BudgetItemRepo budgetItemRepo;
 
@@ -132,5 +141,41 @@ public class BudgetService {
             saveBudgetItem(budgetItem);
         });
         return getBudget(budgetParams.getBudgetMonth());
+    }
+
+    public InputStream downloadBudget(FilterParameters filterOptions) {
+        List<BudgetItem> budgetItems = budgetItemRepo.findAllByDateBetween(filterOptions.getFromDate(), filterOptions.getToDate());
+        ByteArrayInputStream inputStream = null;
+        if (budgetItems != null && budgetItems.size() > 0) {
+            inputStream = budgetItemsToStream(budgetItems);
+        }
+        return inputStream;
+    }
+
+    private ByteArrayInputStream budgetItemsToStream(List<BudgetItem> budgetItems) {
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+            csvPrinter.printRecord(CSV_HEADER);
+            for (BudgetItem budgetItem : budgetItems) {
+                List<String> data = Arrays.asList(
+                        commonUtil.getDateString(budgetItem.getDate()),
+                        budgetItem.getAccount(),
+                        budgetItem.getType(),
+                        String.valueOf(budgetItem.getAmount()),
+                        budgetItem.getDescription(),
+                        budgetItem.getParticulars(),
+                        budgetItem.getCategory()
+                );
+                csvPrinter.printRecord(data);
+            }
+
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            logger.error("Failed to import data to CSV file: " + e.getMessage());
+        }
+        return null;
     }
 }

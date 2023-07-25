@@ -3,10 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { BudgetService } from 'src/app/services/budget.service';
 import { Budget } from 'src/app/shared/model/budget';
+import { DateRangeService } from 'src/app/services/date-range.service';
+import { CommonUtil } from 'src/app/shared/common-util';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Globals } from 'src/app/shared/global';
 import { BudgetSummaryItem } from 'src/app/shared/model/budget-summary-item';
 import { BudgetItem } from 'src/app/shared/model/budget-item';
+import { saveAs } from 'file-saver';
+import { FilterParams } from 'src/app/shared/model/filter-params';
 
 dayjs.extend(customParseFormat);
 
@@ -38,8 +42,11 @@ export class BudgetComponent implements OnInit {
   showBudgetFrom = '';
   createBudgetFrom = '';
   currencyCode = Globals.CURRENCY_CODE;
-  
-  constructor(public budgetService: BudgetService, public router: Router, private route: ActivatedRoute) { }
+  filterParams: FilterParams = {
+    fromDate: '',
+    toDate: ''
+  }
+  constructor(public budgetService: BudgetService, private dateRangeService: DateRangeService, public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     let fromMonth = this.route.snapshot.queryParams['budgetMonth'];
@@ -56,6 +63,10 @@ export class BudgetComponent implements OnInit {
     }
 
     console.log('fromMonth: ', fromMonth, 'showBudgetFrom', this.showBudgetFrom);
+    this.dateRangeService.dateRange().subscribe(value => {
+      this.filterParams.fromDate = CommonUtil.getDateString(value.startDate);
+      this.filterParams.toDate = CommonUtil.getDateString(value.endDate);
+    });
     this.loadBudget();
   }
 
@@ -169,5 +180,17 @@ export class BudgetComponent implements OnInit {
 
   getKeys(object: any) {
     return Object.keys(object);
+  }
+
+  downloadBudget() {
+    console.log("Downloading Budget...", this.filterParams);
+    return this.budgetService.downloadBudget(this.filterParams)
+      .subscribe((response: any) => {
+        let blob: any = new Blob([response], { type: 'text/csv; charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+
+        saveAs(blob, 'Budget_' + CommonUtil.getCurrentDateTimeString() + '.csv');
+      }), (error: any) => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
   }
 }

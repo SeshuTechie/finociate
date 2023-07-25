@@ -39,4 +39,23 @@ export class CommonUtil {
         let parts = date.split('-');
         return Number(parts[2] + (parts[1].length < 2 ? '0' : '') + parts[1] + (parts[0].length < 2 ? '0' : '') + parts[0]);
     }
+
+    static getCurrentDateTimeString() {
+        let currentdate = new Date();
+        let datetime = currentdate.getFullYear() +
+                this.getString((currentdate.getMonth()+1), 2) +
+                this.getString(currentdate.getDate(), 2) +
+                this.getString(currentdate.getHours(), 2) +
+                this.getString(currentdate.getMinutes(), 2) +
+                this.getString(currentdate.getSeconds(), 2);
+        return datetime;
+    }
+
+    static getString(value: any, minLength: number) {
+        let str = '' + value;
+        if (str.length < minLength) {
+            str = str.padStart(minLength, '0');
+        }
+        return str;
+    }
 }

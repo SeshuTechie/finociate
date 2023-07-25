@@ -1,5 +1,6 @@
 package com.seshutechie.finociate.controller;
 
+import com.seshutechie.finociate.common.util.CommonUtil;
 import com.seshutechie.finociate.model.BudgetItem;
 import com.seshutechie.finociate.model.Budget;
 import com.seshutechie.finociate.model.BudgetParams;
@@ -7,6 +8,11 @@ import com.seshutechie.finociate.service.BudgetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -20,11 +26,11 @@ public class BudgetController {
     private BudgetService budgetService;
 
     @Autowired
-    private ControllerUtil controllerUtil;
+    private CommonUtil commonUtil;
 
     @GetMapping("/budget")
     public Budget getBudget(@RequestParam Optional<String> budgetMonth) {
-        return budgetService.getBudget(controllerUtil.getDate(budgetMonth.orElse(null)));
+        return budgetService.getBudget(commonUtil.getDate(budgetMonth.orElse(null)));
     }
 
     @PostMapping("/new-budget")
@@ -51,4 +57,16 @@ public class BudgetController {
     public BudgetItem deleteBudgetItem(@PathVariable String id) {
         return budgetService.deleteBudgetItem(id);
     }
+
+    @GetMapping("/budget/download")
+    public ResponseEntity<Resource> downloadTransactions(@RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
+        String filename = "Budget_" + fromDate.orElse("") + "_" + toDate.orElse("") + ".csv";
+        InputStreamResource file = new InputStreamResource(budgetService.downloadBudget(commonUtil.getFilterOptions(fromDate, toDate)));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
+    }
+
 }

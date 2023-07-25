@@ -1,5 +1,6 @@
 package com.seshutechie.finociate.controller;
 
+import com.seshutechie.finociate.common.util.CommonUtil;
 import com.seshutechie.finociate.model.ReportData;
 import com.seshutechie.finociate.model.ReportDef;
 import com.seshutechie.finociate.model.ReportDefList;
@@ -21,7 +22,7 @@ public class ReportController {
     private ReportService reportService;
 
     @Autowired
-    private ControllerUtil controllerUtil;
+    private CommonUtil commonUtil;
 
     @GetMapping("/report-def/{id}")
     public ReportDef getReportDef(@PathVariable String id) {
@@ -57,6 +58,6 @@ public class ReportController {
     @GetMapping("/report/{id}")
     public ReportData getReportData(@PathVariable String id,
                                     @RequestParam Optional<String> fromDate, @RequestParam Optional<String> toDate) {
-        return reportService.getReportData(id, controllerUtil.getFilterOptions(fromDate, toDate));
+        return reportService.getReportData(id, commonUtil.getFilterOptions(fromDate, toDate));
     }
 }
