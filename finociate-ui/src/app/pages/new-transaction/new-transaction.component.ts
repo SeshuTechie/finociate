@@ -74,6 +74,7 @@ export class NewTransactionComponent implements OnInit {
       if (data) {
         this.transaction = data;
       } else {
+        alert('No transaction found');
         console.log("Got no transaction");
       }
     });
