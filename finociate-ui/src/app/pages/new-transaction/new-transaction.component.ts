@@ -71,7 +71,11 @@ export class NewTransactionComponent implements OnInit {
 
   findTransaction() {
     this.transactionService.findTransaction(this.transactionText).subscribe((data: Transaction) => {
-      this.transaction = data;
+      if (data) {
+        this.transaction = data;
+      } else {
+        console.log("Got no transaction");
+      }
     });
   }
 

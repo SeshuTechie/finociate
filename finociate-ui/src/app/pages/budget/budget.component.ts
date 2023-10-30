@@ -179,7 +179,8 @@ export class BudgetComponent implements OnInit {
   }
 
   getKeys(object: any) {
-    return Object.keys(object);
+    // retrun all keys except empty string
+    return Object.keys(object).filter(key => key != '').sort();
   }
 
   downloadBudget() {
