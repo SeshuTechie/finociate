@@ -22,6 +22,9 @@ import { TextPatternsComponent } from '../pages/text-patterns/text-patterns.comp
 import { NewTextPatternComponent } from '../pages/new-text-pattern/new-text-pattern.component';
 import { NewReportComponent } from '../pages/new-report/new-report.component';
 import { SharedModule } from '../shared/shared.module';
+import { PatternsConfigComponent } from '../pages/patterns-config/patterns-config.component';
+import { StoreMappingComponent } from '../pages/store-mapping/store-mapping.component';
+import { StoreParamsComponent } from '../pages/store-params/store-params.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,9 @@ import { SharedModule } from '../shared/shared.module';
     TextPatternsComponent,
     NewTextPatternComponent,
     NewReportComponent,
+    PatternsConfigComponent,
+    StoreMappingComponent,
+    StoreParamsComponent,
   ],
   imports: [
     CommonModule,

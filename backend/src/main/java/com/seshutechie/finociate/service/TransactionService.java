@@ -83,6 +83,7 @@ public class TransactionService {
     public Transaction updateTransaction(Transaction transaction) {
         try {
             transactionRepo.findById(transaction.getId()).orElseThrow();
+            validateTransaction(transaction);
         } catch (NoSuchElementException ex) {
             throw new TransactionNotFoundException(transaction.getId());
         }

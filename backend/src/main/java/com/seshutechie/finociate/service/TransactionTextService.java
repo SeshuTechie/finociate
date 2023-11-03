@@ -1,8 +1,9 @@
 package com.seshutechie.finociate.service;
 
-import com.seshutechie.finociate.model.Transaction;
-import com.seshutechie.finociate.model.TransactionTextParams;
-import com.seshutechie.finociate.model.TransactionTextPattern;
+import com.seshutechie.finociate.exception.InvalidDataException;
+import com.seshutechie.finociate.model.*;
+import com.seshutechie.finociate.repository.StoreMappingRepo;
+import com.seshutechie.finociate.repository.StoreParamsRepo;
 import com.seshutechie.finociate.repository.TransactionTextPatternRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,26 +16,46 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class TransactionTextService {
     private static final Logger logger = LoggerFactory.getLogger(TransactionTextService.class);
+    private static final String DATE_DELIMITER = ";";
 
     @Autowired
-    TransactionTextPatternRepo transactionTextPatternRepo;
+    private TransactionTextPatternRepo transactionTextPatternRepo;
+
+    @Autowired
+    private StoreMappingRepo storeMappingRepo;
+
+    @Autowired
+    private StoreParamsRepo storeParamsRepo;
 
     public Transaction parseTransaction(String text) {
         Transaction transaction = null;
-        List<TransactionTextPattern> textPatterns = transactionTextPatternRepo.findAll();
-        for (TransactionTextPattern textPattern : textPatterns ) {
-            transaction = parse(text, textPattern);
-            if (transaction != null) {
-                break;
+        if (text != null && !text.isBlank()) {
+            text = preProcessText(text);
+            List<TransactionTextPattern> textPatterns = transactionTextPatternRepo.findAll();
+            for (TransactionTextPattern textPattern : textPatterns) {
+                transaction = parse(text, textPattern);
+                if (transaction != null) {
+                    break;
+                }
             }
         }
         return transaction;
+    }
+
+    private String preProcessText(String text) {
+        String processedText = text;
+        if (text.startsWith(TransactionTextParams._DATE_.name())) {
+            processedText = TransactionTextParams._DATE_.name() + DATE_DELIMITER +
+                    text.substring(TransactionTextParams._DATE_.name().length());
+        }
+        return processedText;
     }
 
     private Transaction parse(String text, TransactionTextPattern textPattern) {
@@ -61,7 +82,8 @@ public class TransactionTextService {
                     builder.parseCaseInsensitive();
                     builder.appendPattern(textPattern.getDatePattern());
                     DateTimeFormatter dateFormat = builder.toFormatter();
-                    transaction.setDate(LocalDate.parse(matcher.group(getParamIndex(paramIndex, TransactionTextParams._DATE_)), dateFormat));
+                    transaction.setDate(LocalDate.parse(
+                            matcher.group(getParamIndex(paramIndex, TransactionTextParams._DATE_)), dateFormat));
                 }
                 if (getParamIndex(paramIndex, TransactionTextParams._STORE_) > 0) {
                     transaction.setStore(matcher.group(getParamIndex(paramIndex, TransactionTextParams._STORE_)));
@@ -75,8 +97,27 @@ public class TransactionTextService {
                 transaction.setMode(textPattern.getOtherValues().getMode());
                 transaction.setCategory(textPattern.getOtherValues().getCategory());
             }
+            postProcessTransaction(transaction);
         }
         return transaction;
+    }
+
+    private void postProcessTransaction(Transaction transaction) {
+        updateStoreParameters(transaction);
+    }
+
+    private void updateStoreParameters(Transaction transaction) {
+        StoreMapping storeMapping = storeMappingRepo.findByStoreFound(transaction.getStore());
+        if (storeMapping != null) {
+            transaction.setStore(storeMapping.getMapToStore());
+        }
+
+        StoreParams storeParams = storeParamsRepo.findByStore(transaction.getStore());
+        if (storeParams != null) {
+            transaction.setDescription(storeParams.getDescription());
+            transaction.setCategory(storeParams.getCategory());
+            transaction.setSubCategory(storeParams.getSubcategory());
+        }
     }
 
     private int getParamIndex(Map<String, Integer> paramIndex, TransactionTextParams params) {
@@ -119,11 +160,54 @@ public class TransactionTextService {
     }
 
     public TransactionTextPattern saveTextPattern(TransactionTextPattern textPattern) {
+        validateTextPattern(textPattern);
+        preProcessPattern(textPattern);
         return transactionTextPatternRepo.save(textPattern);
+    }
+
+    private void preProcessPattern(TransactionTextPattern textPattern) {
+        if (textPattern.getPattern().startsWith(TransactionTextParams._DATE_.name())) {
+            if (textPattern.getPattern().indexOf(DATE_DELIMITER) != TransactionTextParams._DATE_.name().length()) {
+                String pattern = textPattern.getPattern();
+                textPattern.setPattern(TransactionTextParams._DATE_.name() + DATE_DELIMITER +
+                        pattern.substring(TransactionTextParams._DATE_.name().length()));
+            }
+        }
+    }
+
+    private void validateTextPattern(TransactionTextPattern textPattern) {
+        if (textPattern == null) {
+            logger.error("Text Pattern is null");
+            throw new InvalidDataException("Text Pattern is null");
+        }
+        if (textPattern.getPattern() == null || textPattern.getPattern().isBlank()) {
+            logger.error("Text Pattern is blank");
+            throw new InvalidDataException("Text Pattern is blank");
+        }
+        if (textPattern.getName() == null || textPattern.getName().isBlank()) {
+            logger.error("Text Pattern's name is blank");
+            throw new InvalidDataException("Text Pattern's name is blank");
+        }
+        if (textPattern.getIdentifier() == null || textPattern.getIdentifier().isBlank()) {
+            logger.error("Text Pattern's identifier is blank");
+            throw new InvalidDataException("Text Pattern's identifier is blank");
+        }
+        TransactionTextPattern patternByName = transactionTextPatternRepo.findByName(textPattern.getName());
+        if (patternByName != null && !patternByName.getId().equals(textPattern.getId())) {
+            logger.error("Text Pattern's name already exists");
+            throw new InvalidDataException("Text Pattern's name already exists");
+        }
+        if (textPattern.getPattern().indexOf(TransactionTextParams._DATE_.name()) >= 0 &&
+                (textPattern.getDatePattern() == null || textPattern.getDatePattern().isBlank())) {
+            logger.error("Date pattern is blank");
+            throw new InvalidDataException("Date pattern is blank");
+        }
     }
 
     public TransactionTextPattern updateTextPattern(TransactionTextPattern textPattern) {
         transactionTextPatternRepo.findById(textPattern.getId()).orElseThrow();
+        validateTextPattern(textPattern);
+        preProcessPattern(textPattern);
         return transactionTextPatternRepo.save(textPattern);
     }
 
@@ -135,6 +219,69 @@ public class TransactionTextService {
         TransactionTextPattern textPattern = transactionTextPatternRepo.findById(id).orElseThrow();
         transactionTextPatternRepo.delete(textPattern);
         return textPattern;
+    }
+
+    public List<TransactionTextPattern> getAllTextPattern() {
+        return transactionTextPatternRepo.findAll();
+    }
+
+    public StoreMappingList getAllStoreMappings() {
+        return new StoreMappingList(storeMappingRepo.findAll());
+    }
+
+    public StoreMapping saveStoreMapping(StoreMapping storeMapping) {
+        if (storeMapping == null) {
+            throw new InvalidDataException("Store Mapping is null");
+        }
+        if (storeMapping.getStoreFound() == null || storeMapping.getStoreFound().isBlank()) {
+            throw new InvalidDataException("Store found can not be blank");
+        }
+        if (storeMapping.getMapToStore() == null || storeMapping.getMapToStore().isBlank()) {
+            throw new InvalidDataException("Map to store can not be blank");
+        }
+        if (storeMappingRepo.findByStoreFound(storeMapping.getStoreFound()) != null) {
+            throw new InvalidDataException("Mapping already exists for this store");
+        }
+        return storeMappingRepo.save(storeMapping);
+    }
+
+    public StoreMapping deleteStoreMapping(String id) {
+        StoreMapping storeMapping;
+        try {
+            storeMapping = storeMappingRepo.findById(id).orElseThrow();
+            storeMappingRepo.delete(storeMapping);
+        } catch (NoSuchElementException e) {
+            throw new InvalidDataException("No store mapping found with id: " + id);
+        }
+        return storeMapping;
+    }
+
+    public StoreParamsList getAllStoreParams() {
+        return new StoreParamsList(storeParamsRepo.findAll());
+    }
+
+    public StoreParams saveStoreParams(StoreParams storeParams) {
+        if (storeParams == null) {
+            throw new InvalidDataException("Store Params is null");
+        }
+        if (storeParams.getStore() == null || storeParams.getStore().isBlank()) {
+            throw new InvalidDataException("Store can not be blank");
+        }
+        if (storeParamsRepo.findByStore(storeParams.getStore()) != null) {
+            throw new InvalidDataException("Mapping already exists for this store");
+        }
+        return storeParamsRepo.save(storeParams);
+    }
+
+    public StoreParams deleteStoreParams(String id) {
+        StoreParams storeParams;
+        try {
+            storeParams = storeParamsRepo.findById(id).orElseThrow();
+            storeParamsRepo.delete(storeParams);
+        } catch (NoSuchElementException e) {
+            throw new InvalidDataException("No store params found with id: " + id);
+        }
+        return storeParams;
     }
 
     // Dirty Testing
@@ -181,9 +328,5 @@ public class TransactionTextService {
                 "This is to inform you that an amount of Rs. 18,000.00 has been debited from your account No. XXXX12345 on account of National Electronic Funds Transfer transaction using HDFC Bank NetBanking.",
                 textPattern);
         System.out.println(transaction);
-    }
-
-    public List<TransactionTextPattern> getAllTextPattern() {
-        return transactionTextPatternRepo.findAll();
     }
 }

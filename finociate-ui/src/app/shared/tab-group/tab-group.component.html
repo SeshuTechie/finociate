@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs">
+    <li *ngFor="let tab of tabs" class="nav-item" (click)="selectTab(tab);$event.preventDefault()" >
+        <a class="nav-link" [class.active]="tab.active" aria-current="page" href="{{ tab.link }}">{{ tab.title }}</a>
+    </li>
+</ul>
+<ng-content></ng-content>

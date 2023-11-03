@@ -1,0 +1,72 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <form #storeParamsFrom="ngForm" (ngSubmit)="addStoreParams()">
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newStoreParams.store" class="form-control"
+                        placeholder="Store" name="store">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newStoreParams.description" class="form-control"
+                        placeholder="Description" name="description">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newStoreParams.category" class="form-control"
+                        placeholder="Category" name="category">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newStoreParams.subcategory" class="form-control"
+                        placeholder="Sub-Category" name="subcategory">
+                </div>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary btn-circle" (click)="addStoreParams()">
+                    <i class="bi bi-plus-square"></i>
+                </a>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <a (click)="storeParamsFrom.reset()" class="btn btn-danger btn-circle">
+                        <i class="bi bi-x-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table width="100%" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr class="table-dark">
+                        <th>Store</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Sub-Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let storeParams of storeParamsList">
+                        <td>{{ storeParams.store }}</td>
+                        <td>{{ storeParams.description }}</td>
+                        <td>{{ storeParams.category }}</td>
+                        <td>{{ storeParams.subcategory }}</td>
+                        <td>
+                            <a (click)="deleteStoreParams(storeParams.id, storeParams.store)" class="btn btn-danger btn-circle">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

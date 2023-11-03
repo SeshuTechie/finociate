@@ -1,8 +1,6 @@
 package com.seshutechie.finociate.controller;
 
-import com.seshutechie.finociate.model.Transaction;
-import com.seshutechie.finociate.model.TransactionText;
-import com.seshutechie.finociate.model.TransactionTextPattern;
+import com.seshutechie.finociate.model.*;
 import com.seshutechie.finociate.service.TransactionTextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +41,33 @@ public class TransactionTextController {
     @GetMapping("/transaction-text-patterns")
     public List<TransactionTextPattern> getAllTransactionTextPattern() {
         return transactionTextService.getAllTextPattern();
+    }
+
+    @GetMapping("/store-mappings")
+    public StoreMappingList getAllStoreMappings() {
+        return transactionTextService.getAllStoreMappings();
+    }
+
+    @PostMapping("/store-mapping")
+    public StoreMapping createStoreMapping(@RequestBody StoreMapping storeMapping) {
+        return transactionTextService.saveStoreMapping(storeMapping);
+    }
+    @DeleteMapping("/store-mapping/{id}")
+    public StoreMapping deleteStoreMapping(@PathVariable String id) {
+        return transactionTextService.deleteStoreMapping(id);
+    }
+
+    @GetMapping("/store-params")
+    public StoreParamsList getAllStoreParams() {
+        return transactionTextService.getAllStoreParams();
+    }
+
+    @PostMapping("/store-params")
+    public StoreParams createStoreMapping(@RequestBody StoreParams storeParams) {
+        return transactionTextService.saveStoreParams(storeParams);
+    }
+    @DeleteMapping("/store-params/{id}")
+    public StoreParams deleteStoreParams(@PathVariable String id) {
+        return transactionTextService.deleteStoreParams(id);
     }
 }

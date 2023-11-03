@@ -3,49 +3,17 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Transaction Text Patterns</h1>
+    <tab-group>
+        <tab-content [tabTitle]="'Patterns'" [tabLink]="'/text-patterns?tab=patterns'" [active]="getTabActive('patterns')">
+            <patterns-config></patterns-config>
+        </tab-content>
+        <tab-content [tabTitle]="'Store Mapping'" [tabLink]="'/text-patterns?tab=store-mapping'" [active]="getTabActive('store-mapping')">
+            <store-mapping></store-mapping>
+        </tab-content>
+        <tab-content [tabTitle]="'Store Params'" [tabLink]="'/text-patterns?tab=store-params'" [active]="getTabActive('store-params')">
+            <store-params></store-params>
+        </tab-content>
+    </tab-group>
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <form #filterFrom="ngForm" (ngSubmit)="loadTextPatterns()">
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-group">
-                        <a routerLink="/new-text-pattern" class="btn btn-primary btn-circle">
-                            <i class="bi bi-plus-square"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </form>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table width="100%" class="table table-bordered table-striped table-hover">
-                    <thead>
-                        <tr class="table-dark">
-                            <th>Name</th>
-                            <th>Identifier</th>
-                            <th>Pattern</th>
-                            <th>Date Pattern</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let textPattern of textPatterns" (click) = "editTextPattern(textPattern.id)">
-                            <td>{{ textPattern.name }}</td>
-                            <td>{{ textPattern.identifier }}</td>
-                            <td>{{ textPattern.pattern }}</td>
-                            <td>{{ textPattern.datePattern }}</td>
-                            <td>
-                                <a (click)="deleteTextPattern(textPattern.id);$event.stopPropagation()" class="btn btn-danger btn-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
 <!-- /.container-fluid -->

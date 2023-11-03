@@ -1,0 +1,56 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <form #storeMapFrom="ngForm" (ngSubmit)="addStoreMapping()">
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newMapping.storeFound" class="form-control"
+                        placeholder="Store Found" name="store">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newMapping.mapToStore" class="form-control"
+                        placeholder="Map To Store" name="mapTo">
+                </div>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary btn-circle" (click)="addStoreMapping()">
+                    <i class="bi bi-plus-square"></i>
+                </a>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <a (click)="storeMapFrom.reset()" class="btn btn-danger btn-circle">
+                        <i class="bi bi-x-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table width="100%" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr class="table-dark">
+                        <th>Store Found</th>
+                        <th>Map to Store</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let mapData of storeMappings">
+                        <td>{{ mapData.storeFound }}</td>
+                        <td>{{ mapData.mapToStore }}</td>
+                        <td>
+                            <a (click)="deleteStoreMapping(mapData.id, mapData.storeFound)" class="btn btn-danger btn-circle">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
