@@ -63,8 +63,20 @@ public class TransactionTextService {
         if (text.contains(textPattern.getIdentifier())) {
             text = text.replaceAll("\n", " ");
             logger.debug("Text identified with pattern: {}", textPattern);
+
+            // Delimit date value on transaction text
+            if (textPattern.getPattern().startsWith(TransactionTextParams._DATE_.name())) {
+                int index = text.indexOf(" ", TransactionTextParams._DATE_.name().length());
+
+                if (text.charAt(index - 1) != DATE_DELIMITER.charAt(0)) {
+                    text = text.substring(0, index) + DATE_DELIMITER + text.substring(index);
+                }
+            }
+            logger.debug("Prepared transaction text: {}", text);
+
             String patternText = getPatternText(textPattern);
             logger.debug("Pattern Text: {} ", patternText);
+
             Map<String, Integer> paramIndex = findPatternValueIndex(textPattern);
             logger.debug("Parameter value index: {}", paramIndex);
             transaction = new Transaction();
